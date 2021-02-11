@@ -1,5 +1,5 @@
 const HttpsProxyAgent = require('https-proxy-agent');
-fs = require('fs');
+const fs = require('fs');
 
 const express = require('express')
 const connectDB = require('./config/db');
@@ -16,26 +16,33 @@ app.use('/api/category', require('./routes/api/category'));
 app.use('/api/product-category', require('./routes/api/productCategory'))
 app.use('/api/price-alert', require('./routes/api/priceAlert'))
 app.use('/api/search', require('./routes/api/search'))
+// "aI75My8nmJj0JOHb" GeoIP
+app.use("/", async (req, res) => {
 
-// app.use("/", async (req, res) => {
+    try {
+        const axiosDefaultConfig = {
+            proxy: false,
+            httpsAgent: new HttpsProxyAgent('http://106.14.247.113:8080')
+        };
 
-//     try {
-//         const axiosDefaultConfig = {
-//             proxy: false,
-//             httpsAgent: new HttpsProxyAgent('http://bhqerbnu-dest:co8lngewzekd@193.8.56.119:80')
-//         };
+        const axios = require ('axios').create(axiosDefaultConfig);
 
-//         const axios = require ('axios').create(axiosDefaultConfig);
+        const response = await axios.get('https://www.idealo.de/preisvergleich/ProductCategory/3751F100733567.html?sortKey=minPrice', {timeout: 20000})
 
-//         const response = await axios.get('https://www.idealo.de/preisvergleich/ProductCategory/3751F100733567.html?sortKey=minPrice')
-//         // const html = await response.data
-//         // console.log(response)
-//         fs.writeFileSync("page.html", response.data);
-//         res.send("bot")
-//     } catch (error) {
-//         console.log(error)
-//     }
-// })
+        fs.writeFileSync("page.html", response.data);
+        res.send("ok")
+    } catch (error) {
+
+        if (error.code === "ERR_SOCKET_CLOSED" || error.code === "ECONNREFUSED" || error.code === "ETIMEDOUT") {
+            console.log(error.message)
+        } else {
+            console.log(error.code)
+            console.log(error.response.status)
+            fs.writeFileSync("page.html", error.response.data);    
+        }
+
+    }
+})
 
 // app.use("/", (req, res) => {
     
