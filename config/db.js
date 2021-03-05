@@ -3,6 +3,7 @@ const config = require('config');
 const db = config.get('mongoURI');
 
 const connectDB = async () => {
+
     try {
         await mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
         mongoose.set('useFindAndModify', false)
@@ -11,6 +12,8 @@ const connectDB = async () => {
         console.log(err)
         process.exit(1)
     }
+
+    return mongoose
 }
 
 module.exports = connectDB;

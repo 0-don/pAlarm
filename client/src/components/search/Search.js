@@ -10,7 +10,7 @@ const Search = ({ search, searchUpdate }) => {
         if (searchLink) {
             history.push(`/product-category/${searchLink}`)
         }else {
-            searchUpdate(searchInputValue)
+            searchUpdate(searchInputValue, history)
         }
     }
 

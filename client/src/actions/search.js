@@ -17,10 +17,16 @@ export const search = (searchText, history) => async dispatch => {
 
 }
 
-export const searchUpdate = (value) => async dispatch => {
+export const searchUpdate = (value, history) => async dispatch => {
     try {
         const res = await axios.get(`/api/search/${value}`)
-        dispatch({ type: SEARCH_UPDATE, payload: res.data })
+        if (res.data.categoryChild) {
+            history.push(`/product-category/${res.data.categoryChild}`);
+        } else {
+            // dispatch({ type: SEARCH, payload: res.data })
+            // history.push("/search");
+            dispatch({ type: SEARCH_UPDATE, payload: res.data })
+        }
     } catch (error) {
         
     }
