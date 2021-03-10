@@ -1,13 +1,15 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from "react-redux";
 import { getPriceAlerts, deletePriceAlert, editPriceAlert } from "../../actions/priceAlert"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
 
 
-
 const PriceAlert = ({ getPriceAlerts, priceAlert, deletePriceAlert, editPriceAlert, history }) => {
     dayjs.extend(relativeTime)
+
+    const [link, setLink] = useState("")
+    const [targetPrice, setTargetPrice] = useState(0)
 
     useEffect(() => {
         getPriceAlerts()
@@ -19,9 +21,50 @@ const PriceAlert = ({ getPriceAlerts, priceAlert, deletePriceAlert, editPriceAle
         })
         return values.join(", ")
     }
-    
+
+    const alertFromLink = () => {
+
+    }
+
     return (
         <section className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+
+            <div className="flex justify-between flex-wrap">
+
+                <div className="w-9/12">
+                    <label className="text-sm text-gray-400">Link</label>
+                    <div className="w-full inline-flex border">
+                        <div className="w-10 pt-2 bg-gray-100">
+                            <svg fill="none" className="w-6 text-gray-400 mx-auto" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg>
+                        </div>
+                        <input value={link} onChange={(e) => setLink(e.target.value)} type="text" className="w-11/12 focus:outline-none focus:text-gray-600 p-2" placeholder="https://www.idealo.de/preisvergleich/ProductCategory/16073F1146727-101350014.html" />
+                    </div>
+                </div>
+
+                <div className="w-1/12 ">
+                    <label className="text-sm text-gray-400">Target Price</label>
+                    <div className="w-full inline-flex border">
+                        <div className="pt-2 w-10 bg-gray-100">
+                            <svg fill="none" className="w-6 text-gray-400 mx-auto" viewBox="0 0 24 24" stroke="currentColor"> <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.121 15.536c-1.171 1.952-3.07 1.952-4.242 0-1.172-1.953-1.172-5.119 0-7.072 1.171-1.952 3.07-1.952 4.242 0M8 10.5h4m-4 3h4m9-1.5a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        </div>
+                        <input value={targetPrice} onChange={(e) => setTargetPrice(e.target.value)} type="number" className="w-11/12 focus:outline-none focus:text-gray-600 p-2" placeholder="100€" />
+                    </div>
+                </div>
+
+                <div className="w-1/12">
+                    <button onClick={alertFromLink} className="text-white w-full mx-auto max-w-sm rounded-md text-center bg-indigo-400 py-2 px-4 inline-flex items-center focus:outline-none md:float-right">
+                        <svg fill="none" className="w-4 text-white mr-2" viewBox="0 0 24 24" stroke="currentColor"> <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        Create
+                    </button>
+                </div>
+
+            </div>
+
+
+
+
+
+
             {priceAlert.map(({ categoryChildDbId, categoryChild, attributes, _id, targetPrice, latestPrice, createdAt, updatedAt, }) => (
                 <div key={_id} className="flex flex-row mt-2 shadow-md">
                     <div className="flex w-full items-center justify-between bg-white dark:bg-gray-800 px-8 py-6 border-l-4 border-green-500 dark:border-green-300">
@@ -89,7 +132,6 @@ const PriceAlert = ({ getPriceAlerts, priceAlert, deletePriceAlert, editPriceAle
 
 const mapStateToProps = state => ({
     priceAlert: state.priceAlert.priceAlert,
-
 })
 
 export default connect(mapStateToProps, { getPriceAlerts, deletePriceAlert, editPriceAlert })(PriceAlert)

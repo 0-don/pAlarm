@@ -4,8 +4,19 @@ import {
     CREATE_PRICE_ALERT,
     DELETE_PRICE_ALERT,
     GET_PRICE_ALERTS,
-    EDIT_PRICE_ALERT
+    EDIT_PRICE_ALERT,
+    CREATE_ALERT_FROM_LINK
 } from "./types"
+
+export const createAlertFromLink = (link) => async dispatch => {
+    try {
+        const res = await axios.post(`/api/price-alert/alert-from-link`, link)
+        // dispatch({type: CREATE_ALERT_FROM_LINK, payload: res.data})
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 
 export const getPriceAlerts = () => async dispatch => {
     try {

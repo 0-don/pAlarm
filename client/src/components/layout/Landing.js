@@ -3,14 +3,9 @@ import { Link } from "react-router-dom"
 import { connect } from "react-redux";
 import background from "../../img/header.png"
 import "../../assets/css/Landing.css"
-import axios from "axios"
+
 
 export const Landing = () => {
-
-    const test = async() =>{
-        const res = await axios.get("https://www.idealo.de/")
-        console.log(res.data)
-    }
 
     return (
         <Fragment>
@@ -39,13 +34,6 @@ export const Landing = () => {
                                     type="button">
                                     Einloggen
                                 </Link>
-                                <button
-                                onClick={test}
-                                    className="bg-gradient-to-r from-purple-800 to-green-500 hover:from-pink-500 hover:to-green-500 text-white font-bold py-2 px-4 rounded focus:ring transform transition hover:scale-105 duration-300 ease-in-out"
-                                    type="button">
-
-                                    test
-                                </button>
                             </div>
                         </div>
                     </div>

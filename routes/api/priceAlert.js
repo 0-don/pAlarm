@@ -16,6 +16,46 @@ const PriceAlert = require("../../models/PriceAlert");
 const User = require("../../models/User")
 
 
+router.post("/alert-from-link", auth, async (req, res) => {
+
+    const link = req.body
+
+    console.log(link)
+    // const attributeIdLink = attributes.map(e => e.id).join("-")
+    // const link = createProductLink(categoryChildId, attributeIdLink)
+
+    // const priceAlertFields = {}
+
+    // priceAlertFields.user = req.user.id
+    // priceAlertFields.categoryChildDbId = categoryChildDbId
+    // priceAlertFields.categoryChildId = categoryChildId
+    // priceAlertFields.categoryChild = categoryChild
+    // priceAlertFields.link = link
+    // priceAlertFields.targetPrice = targetPrice
+    // priceAlertFields.attributes = attributes
+
+    // try {
+    //     let priceAlert = await PriceAlert.findOne({ user: req.user.id, link })
+    //     if (priceAlert) return res.status(400).json({ msg: "Price Alert already exist" })
+
+    //     priceAlert = new PriceAlert(priceAlertFields)
+    //     await priceAlert.save()
+
+    //     priceAlert = await PriceAlert.findOne({ user: req.user.id, link }).select("-link -attributes._id");
+    //     res.json(priceAlert)
+    // } catch (err) {
+    //     console.log(err)
+    //     res.status(500).send("Server error")
+    // }
+})
+
+
+
+
+
+
+
+
 router.get("/", auth, async (req, res) => {
     const priceAlerts = await PriceAlert.find({ user: req.user.id }).select("-link -attributes._id")
     if (!priceAlerts) return res.json()
