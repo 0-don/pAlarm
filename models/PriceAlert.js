@@ -15,7 +15,6 @@ const PriceAlertSchema = new mongoose.Schema({
     },
     categoryChild: {
         type: String,
-        required: true
     },
     link: {
         type: String,
@@ -36,11 +35,10 @@ const PriceAlertSchema = new mongoose.Schema({
             },
             value: {
                 type: String,
-                required: true
             }
         }
     ],
     
-}, { timestamps: true })
+})
 
 module.exports = PriceAlert = mongoose.model("pricealert", PriceAlertSchema)

@@ -8,12 +8,15 @@ import {
     CREATE_ALERT_FROM_LINK
 } from "./types"
 
-export const createAlertFromLink = (link) => async dispatch => {
+export const createAlertFromLink = (link, targetPrice) => async dispatch => {
     try {
-        const res = await axios.post(`/api/price-alert/alert-from-link`, link)
-        // dispatch({type: CREATE_ALERT_FROM_LINK, payload: res.data})
-    } catch (error) {
-        console.log(error)
+        console.log(link, targetPrice)
+        const res = await axios.post(`/api/price-alert/alert-from-link`, {link, targetPrice})
+        dispatch({ type: CREATE_PRICE_ALERT, payload: res.data })
+        dispatch(setAlert("Price alert created from Link", "success"))
+    } catch (err) {
+        const error = err.response.data
+        if(error) dispatch(setAlert(error.msg, "error"))
     }
 }
 

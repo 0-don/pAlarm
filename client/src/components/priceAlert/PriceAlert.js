@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from "react-redux";
-import { getPriceAlerts, deletePriceAlert, editPriceAlert } from "../../actions/priceAlert"
+import { getPriceAlerts, deletePriceAlert, editPriceAlert, createAlertFromLink } from "../../actions/priceAlert"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
 
 
-const PriceAlert = ({ getPriceAlerts, priceAlert, deletePriceAlert, editPriceAlert, history }) => {
+const PriceAlert = ({ getPriceAlerts, priceAlert, deletePriceAlert, editPriceAlert, createAlertFromLink, history }) => {
     dayjs.extend(relativeTime)
 
     const [link, setLink] = useState("")
@@ -17,21 +17,17 @@ const PriceAlert = ({ getPriceAlerts, priceAlert, deletePriceAlert, editPriceAle
 
     const renderAttributes = (attributes) => {
         const values = attributes.map(attribute => {
-            return attribute.value
+            return attribute.value || attribute.id
         })
         return values.join(", ")
     }
-
-    const alertFromLink = () => {
-
-    }
-
+    
     return (
         <section className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
 
-            <div className="flex justify-between flex-wrap">
+            <div className="flex justify-between items-end flex-wrap">
 
-                <div className="w-9/12">
+                <div className="md:w-9/12 w-full">
                     <label className="text-sm text-gray-400">Link</label>
                     <div className="w-full inline-flex border">
                         <div className="w-10 pt-2 bg-gray-100">
@@ -41,7 +37,7 @@ const PriceAlert = ({ getPriceAlerts, priceAlert, deletePriceAlert, editPriceAle
                     </div>
                 </div>
 
-                <div className="w-1/12 ">
+                <div className="md:w-1/12 w-3/12">
                     <label className="text-sm text-gray-400">Target Price</label>
                     <div className="w-full inline-flex border">
                         <div className="pt-2 w-10 bg-gray-100">
@@ -51,8 +47,8 @@ const PriceAlert = ({ getPriceAlerts, priceAlert, deletePriceAlert, editPriceAle
                     </div>
                 </div>
 
-                <div className="w-1/12">
-                    <button onClick={alertFromLink} className="text-white w-full mx-auto max-w-sm rounded-md text-center bg-indigo-400 py-2 px-4 inline-flex items-center focus:outline-none md:float-right">
+                <div className="md:w-1/12 w-3/12">
+                    <button onClick={() => createAlertFromLink(link, targetPrice)} className="mb-1.5 text-white w-full mx-auto max-w-sm rounded-md text-center bg-indigo-400 py-2 px-4 inline-flex items-center focus:outline-none md:float-right">
                         <svg fill="none" className="w-4 text-white mr-2" viewBox="0 0 24 24" stroke="currentColor"> <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         Create
                     </button>
@@ -65,13 +61,13 @@ const PriceAlert = ({ getPriceAlerts, priceAlert, deletePriceAlert, editPriceAle
 
 
 
-            {priceAlert.map(({ categoryChildDbId, categoryChild, attributes, _id, targetPrice, latestPrice, createdAt, updatedAt, }) => (
+            {priceAlert.map(({ categoryChildDbId, categoryChildId, categoryChild, attributes, _id, targetPrice, latestPrice, createdAt, updatedAt, }) => (
                 <div key={_id} className="flex flex-row mt-2 shadow-md">
                     <div className="flex w-full items-center justify-between bg-white dark:bg-gray-800 px-8 py-6 border-l-4 border-green-500 dark:border-green-300">
                         <div className="flex-1 flex flex-col md:flex-row">
 
                             <div className="flex flex-col mb-4 ">
-                                <span className="text-lg font-bold">{categoryChild}</span>
+                                <span className="text-lg font-bold">{categoryChild || categoryChildId }</span>
 
                                 <div className="flex-1 flex flex-col mt-6 ">
                                     <div className="flex my-1 ">
@@ -134,4 +130,4 @@ const mapStateToProps = state => ({
     priceAlert: state.priceAlert.priceAlert,
 })
 
-export default connect(mapStateToProps, { getPriceAlerts, deletePriceAlert, editPriceAlert })(PriceAlert)
+export default connect(mapStateToProps, { getPriceAlerts, deletePriceAlert, editPriceAlert, createAlertFromLink })(PriceAlert)

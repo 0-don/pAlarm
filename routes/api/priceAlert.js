@@ -12,41 +12,51 @@ const createProductLink = require("../../services/createProductLink")
 const createHtmlTemplate = require("../../services/createHtmlTemplate")
 const sendMail = require("../../services/sendMail")
 
+const Category = require("../../models/Category")
 const PriceAlert = require("../../models/PriceAlert");
 const User = require("../../models/User")
 
 
 router.post("/alert-from-link", auth, async (req, res) => {
 
-    const link = req.body
+    const {link, targetPrice} = req.body
 
-    console.log(link)
-    // const attributeIdLink = attributes.map(e => e.id).join("-")
-    // const link = createProductLink(categoryChildId, attributeIdLink)
+    const categoryChildId = link.match(/https:\/\/www\.idealo\.de\/preisvergleich\/ProductCategory\/([0-9]+)[F]?.*/i)
+    const categoryAttributes = link.match(/https:\/\/www.idealo.de\/preisvergleich\/ProductCategory\/[0-9]*F(.+).html/i)
+    // https://www.idealo.de/preisvergleich/ProductCategory/16073F1147301-1263422-101483660.html?sortKey=minPrice
 
-    // const priceAlertFields = {}
+    const categoryChild = !categoryChildId ? "" : await Category.findOne({
+        "categoryChildren": { "$elemMatch": { "categoryChildId": categoryChildId[1] } }
+    }, { "categoryChildren.$": 1 })
 
-    // priceAlertFields.user = req.user.id
-    // priceAlertFields.categoryChildDbId = categoryChildDbId
-    // priceAlertFields.categoryChildId = categoryChildId
-    // priceAlertFields.categoryChild = categoryChild
-    // priceAlertFields.link = link
-    // priceAlertFields.targetPrice = targetPrice
-    // priceAlertFields.attributes = attributes
+    if (targetPrice <= 0) return res.status(400).json({ msg: "Price cannot be smaller then 0" })
+    if (!categoryChild) return res.status(400).json({ msg: "Category not Found, please check the Link" })
+    if (!categoryAttributes) return res.status(400).json({ msg: "No attributes found, please check the Link" })
 
-    // try {
-    //     let priceAlert = await PriceAlert.findOne({ user: req.user.id, link })
-    //     if (priceAlert) return res.status(400).json({ msg: "Price Alert already exist" })
+    const priceAlertFields = {}
 
-    //     priceAlert = new PriceAlert(priceAlertFields)
-    //     await priceAlert.save()
+    priceAlertFields.user = req.user.id
+    priceAlertFields.categoryChildDbId = categoryChild.categoryChildren[0]._id
+    priceAlertFields.categoryChildId = categoryChildId[1]
+    priceAlertFields.link = createProductLink(categoryChildId[1], categoryAttributes[1])
+    priceAlertFields.targetPrice = targetPrice
+    priceAlertFields.attributes = categoryAttributes[1].split("-").map(a => { return{ id: a, value: "" } })
 
-    //     priceAlert = await PriceAlert.findOne({ user: req.user.id, link }).select("-link -attributes._id");
-    //     res.json(priceAlert)
-    // } catch (err) {
-    //     console.log(err)
-    //     res.status(500).send("Server error")
-    // }
+    console.log(priceAlertFields)
+
+    try {
+        let priceAlert = await PriceAlert.findOne({ user: req.user.id, link })
+        if (priceAlert) return res.status(400).json({ msg: "Price Alert already exist" })
+
+        priceAlert = new PriceAlert(priceAlertFields)
+        await priceAlert.save()
+
+        priceAlert = await PriceAlert.findOne({ user: req.user.id, link }).select("-link -attributes._id");
+        res.json(priceAlert)
+    } catch (err) {
+        console.log(err)
+        res.status(500).send("Server error")
+    }
 })
 
 
