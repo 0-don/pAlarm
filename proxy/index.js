@@ -15,8 +15,8 @@ const Proxy = require("../models/Proxy");
 
 Promise.config({ cancellation: true });
 
-const runAll = async() => {
-  for (let i = 0; i < 999; i++) {
+const runAll = async () => {
+  for (let i = 0; i < 1; i++) {
     await refresh()
   }
 }
@@ -34,7 +34,7 @@ const refresh = async () => {
     const proxy = `http://${pURL}`;
     const endpoint = "https://www.idealo.de/";
 
-    const agent = new HttpsProxyAgent(Object.assign(url.parse(proxy), { timeout: 60000 }))
+    const agent = new HttpsProxyAgent(Object.assign(url.parse(proxy), { timeout: 20000 }))
 
     return new Promise((resolve, reject, onCancel) => {
       https.get(endpoint, { agent, headers: { 'User-Agent': randomUseragent.getRandom() } }, (res) => {
@@ -45,9 +45,9 @@ const refresh = async () => {
         } else if (res.statusCode === 429) {
           reject({ index, status: "captcha", proxy: pURL, statusMessage: res.statusCode })
         } else { reject({ index, status: "error", proxy: pURL, statusMessage: res.statusCode }) }
-      }).on("error", err => { clearTimeout(agent.socket.timer); agent.socket.destroy(); agent.req.destroy(); reject({ index, status: "error", proxy: pURL, statusMessage: err?.code || err?.message || err }) });
+      }).on("error", err => { reject({ index, status: "error", proxy: pURL, statusMessage: err?.code || err?.message || err }) });
 
-      onCancel(() => { clearTimeout(agent.timer), agent.socket.destroy(); agent.req.destroy(); });
+      onCancel(() => { clearTimeout(agent.timer), agent.socket.destroy(); agent.req.destroy() });
     }).catch(err => err);
 
   })
@@ -107,7 +107,7 @@ runAll()
 //         } else if (res.statusCode === 429) {
 //           reject({ index, status: "captcha", proxy: pURL, statusMessage: res.statusCode })
 //         } else { reject({ index, status: "error", proxy: pURL, statusMessage: res.statusCode }) }
-//       }).on("error", err => { clearTimeout(agent.socket.timer); agent.socket.destroy(); agent.req.destroy(); reject({ index, status: "error", proxy: pURL, statusMessage: err?.code || err?.message || err }) });
+//       }).on("error", err => { reject({ index, status: "error", proxy: pURL, statusMessage: err?.code || err?.message || err }) });
 
 //       onCancel(() => { clearTimeout(agent.timer), agent.socket.destroy(); agent.req.destroy(); });
 //     }).catch(err => err);

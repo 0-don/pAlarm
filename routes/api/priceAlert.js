@@ -5,12 +5,16 @@ const auth = require("../../middleware/auth");
 const axios = require("axios")
 
 
+const fs = require('fs');
 const createDom = require("../../utils/createDom")
 
 const getProducts = require("../../services/getProducts")
+const getFilters = require("../../services/getFilters")
+const getTitle = require("../../services/getTitle")
 const createProductLink = require("../../services/createProductLink")
 const createHtmlTemplate = require("../../services/createHtmlTemplate")
 const sendMail = require("../../services/sendMail")
+const httpRequest = require("../../services/httpRequest")
 
 const Category = require("../../models/Category")
 const PriceAlert = require("../../models/PriceAlert");
@@ -19,7 +23,7 @@ const User = require("../../models/User")
 
 router.post("/alert-from-link", auth, async (req, res) => {
 
-    const {link, targetPrice} = req.body
+    const { link, targetPrice } = req.body
 
     const categoryChildId = link.match(/https:\/\/www\.idealo\.de\/preisvergleich\/ProductCategory\/([0-9]+)[F]?.*/i)
     const categoryAttributes = link.match(/https:\/\/www.idealo.de\/preisvergleich\/ProductCategory\/[0-9]*F(.+).html/i)
@@ -40,30 +44,24 @@ router.post("/alert-from-link", auth, async (req, res) => {
     priceAlertFields.categoryChildId = categoryChildId[1]
     priceAlertFields.link = createProductLink(categoryChildId[1], categoryAttributes[1])
     priceAlertFields.targetPrice = targetPrice
-    priceAlertFields.attributes = categoryAttributes[1].split("-").map(a => { return{ id: a, value: "" } })
+    priceAlertFields.attributes = categoryAttributes[1].split("-").map(a => { return { id: a, value: "" } })
 
-    console.log(priceAlertFields)
 
     try {
-        let priceAlert = await PriceAlert.findOne({ user: req.user.id, link })
+        let priceAlert = await PriceAlert.findOne({ user: req.user.id, link: priceAlertFields.link })
         if (priceAlert) return res.status(400).json({ msg: "Price Alert already exist" })
 
         priceAlert = new PriceAlert(priceAlertFields)
         await priceAlert.save()
 
-        priceAlert = await PriceAlert.findOne({ user: req.user.id, link }).select("-link -attributes._id");
+        priceAlert = await PriceAlert.findOne({ user: req.user.id, link: priceAlertFields.link }).select("-link -attributes._id");
+        
         res.json(priceAlert)
     } catch (err) {
         console.log(err)
         res.status(500).send("Server error")
     }
 })
-
-
-
-
-
-
 
 
 router.get("/", auth, async (req, res) => {
@@ -73,8 +71,8 @@ router.get("/", auth, async (req, res) => {
     res.json(priceAlerts)
 })
 
-router.delete("/:id", auth, async (req, res) => {
 
+router.delete("/:id", auth, async (req, res) => {
     try {
         const priceAlert = await PriceAlert.findOne({ _id: req.params.id, user: req.user.id })
         await priceAlert.remove()
@@ -133,18 +131,32 @@ router.get("/refresh", async (req, res) => {
     const priceAlerts = await PriceAlert.find().sort("updatedAt").lean()
 
     const productList = await Promise.all(priceAlerts.map(async (alert) => {
-        const request = await axios.get(alert.link)
+        const request = await httpRequest.get(alert.link)
+        // const request = fs.readFileSync("page.html", "utf8")
 
-        const doc = createDom(request.data)
+        const doc = createDom(request)
+
         const products = getProducts(doc)
+        const filters = getFilters(doc)
 
-        const latestPrice = parseInt(products[0].price)
+        const latestPrice = + products[0].price.replace(/,.*/, '').replaceAll(".", "")
         if (latestPrice <= alert.targetPrice) {
             const user = await User.findById(alert.user)
-            const html = await createHtmlTemplate({ alert, products: products.filter(product => parseInt(product.price.replace(/[.\s]/g, '')) <= alert.targetPrice) })
-            sendMail("andrius.ziobakas@googlemail.com", html)
+            const html = await createHtmlTemplate({ alert, products: products.filter(p => p.price.replace(/,.*/, '').replaceAll(".", "") <= alert.targetPrice) })
+            // sendMail("az@googlemail.com", html)
         }
-        await PriceAlert.findOneAndUpdate({ _id: alert._id }, { latestPrice });
+
+        const attributesList = filters.map(f => f.tagValues)
+        const attributes = [].concat(...attributesList)
+        alert.attributes.forEach(a => {
+            const findA = attributes.find(o => o.id === a.id)
+            a.value = findA.value
+        })
+
+        alert.latestPrice = latestPrice
+        alert.categoryChild = getTitle(doc)
+
+        await PriceAlert.findOneAndUpdate({ _id: alert._id }, alert);
 
         return products
     }))

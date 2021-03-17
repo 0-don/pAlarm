@@ -25,6 +25,8 @@ module.exports = {
     SEARCH_IMAGE: './/*[@class="category-slider-image"]/@src',
     SEARCH_AMOUNT: './/*[@class="category-slider-count"]',
     SEARCH_INPUT_VALUE: './/*[@name="value"]/@value',
-    SEARCH_LINK: './/*[@class="category-slider-link"]/@href'
+    SEARCH_LINK: './/*[@class="category-slider-link"]/@href',
+
+    PRODUCT_CATEGORY_TITLE: './/*[@class="offerList-title"]'
 
 }
