@@ -39,7 +39,6 @@
     "nodemailer": "^6.4.17",
     "normalize-url": "^5.3.0",
     "random-useragent": "^0.5.0",
-    "scraperapi-sdk": "^1.0.6",
     "xmldom": "^0.4.0",
     "xpath": "0.0.32"
   },

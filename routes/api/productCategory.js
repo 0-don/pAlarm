@@ -5,7 +5,6 @@ const createDom = require("../../utils/createDom")
 
 const Category = require("../../models/Category")
 const ObjectId = require('mongoose').Types.ObjectId;
-const scraperapiClient = require('scraperapi-sdk')('8b9603a73a5c17d0ed7bb6c90d118a4b')
 const getProducts = require("../../services/getProducts")
 const getFilters = require("../../services/getFilters")
 const createProductLink = require("../../services/createProductLink")
@@ -26,8 +25,6 @@ router.post("/:categoryId", async (req, res) => {
         const attributeIdLink = req.body.map(e => e.id).join("-")
         
         const request = await axios.get(createProductLink(categoryChildId, attributeIdLink))
-        // const request = await scraperapiClient.get(createProductLink(categoryChildId, attributeIdLink))
-        // console.log(request)
         const doc = createDom(request.data)
         const products = getProducts(doc)
         const filters = getFilters(doc)

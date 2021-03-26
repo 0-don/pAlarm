@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const debug_1 = __importDefault(require("debug"));
 const debug = debug_1.default('https-proxy-agent:parse-proxy-response');
-function parseProxyResponse(socket) {
+function parseProxyResponse(socket, timer) {
     return new Promise((resolve, reject) => {
         // we need to buffer any HTTP traffic that happens with the proxy before we get
         // the CONNECT response, so that if the response is anything other than an "200"
@@ -38,6 +38,7 @@ function parseProxyResponse(socket) {
         function onerror(err) {
             cleanup();
             debug('onerror %o', err);
+            clearTimeout(timer);
             reject(err);
         }
         function ondata(b) {

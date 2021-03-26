@@ -132,7 +132,7 @@ class HttpsProxyAgent extends agent_base_1.Agent {
             for (const name of Object.keys(headers)) {
                 payload += `${name}: ${headers[name]}\r\n`;
             }
-            const proxyResponsePromise = parse_proxy_response_1.default(socket);
+            const proxyResponsePromise = parse_proxy_response_1.default(socket, this.timer);
             socket.write(`${payload}\r\n`);
             const { statusCode, buffered } = yield proxyResponsePromise;
             if (statusCode === 200) {

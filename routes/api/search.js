@@ -5,7 +5,6 @@ const auth = require("../../middleware/auth");
 const { parse, stringify } = require('flatted');
 
 const FormData = require('form-data');
-const scraperapiClient = require('scraperapi-sdk')('8b9603a73a5c17d0ed7bb6c90d118a4b')
 const createDom = require("../../utils/createDom")
 const config = require("config")
 const searchBaseUrl = config.get('searchBaseUrl');

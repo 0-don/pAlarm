@@ -4,4 +4,4 @@ export interface ProxyResponse {
     statusCode: number;
     buffered: Buffer;
 }
-export default function parseProxyResponse(socket: Readable): Promise<ProxyResponse>;
+export default function parseProxyResponse(socket: Readable, timer: any): Promise<ProxyResponse>;
