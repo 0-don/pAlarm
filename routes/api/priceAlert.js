@@ -139,10 +139,10 @@ router.get("/refresh", async (req, res) => {
         const products = getProducts(doc)
         const filters = getFilters(doc)
 
-        const latestPrice = + products[0].price.replace(/,.*/, '').replaceAll(".", "")
+        const latestPrice = + products[0].price.replace(/,.*/, '').replace(".", "").replace(".", "")
         if (latestPrice <= alert.targetPrice) {
             const user = await User.findById(alert.user)
-            const html = await createHtmlTemplate({ alert, products: products.filter(p => p.price.replace(/,.*/, '').replaceAll(".", "") <= alert.targetPrice) })
+            const html = await createHtmlTemplate({ alert, products: products.filter(p => p.price.replace(/,.*/, '').replace(".", "").replace(".", "") <= alert.targetPrice) })
             // sendMail("az@googlemail.com", html)
         }
 
@@ -158,7 +158,7 @@ router.get("/refresh", async (req, res) => {
 
         await PriceAlert.findOneAndUpdate({ _id: alert._id }, alert);
 
-        return products
+        return PriceAlert
     }))
 
     res.json({ priceAlerts: priceAlerts, productList: productList })
