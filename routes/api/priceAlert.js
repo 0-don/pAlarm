@@ -33,10 +33,14 @@ router.post("/alert-from-link", auth, async (req, res) => {
         "categoryChildren": { "$elemMatch": { "categoryChildId": categoryChildId[1] } }
     }, { "categoryChildren.$": 1 })
 
+    const user = await User.findById(req.user.id)
+    const priceAlerts = await PriceAlert.find({ user: req.user.id })
+
     if (targetPrice <= 0) return res.status(400).json({ msg: "Price cannot be smaller then 0" })
     if (!categoryChild) return res.status(400).json({ msg: "Category not Found, please check the Link" })
     if (!categoryAttributes) return res.status(400).json({ msg: "No attributes found, please check the Link" })
-
+    if (priceAlerts.length >= user.priceAlert) return res.status(400).json({ msg: "Price alert limit reached!" })
+    
     const priceAlertFields = {}
 
     priceAlertFields.user = req.user.id

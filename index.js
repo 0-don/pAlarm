@@ -14,7 +14,7 @@ app.use('/api/category', require('./routes/api/category'));
 app.use('/api/product-category', require('./routes/api/productCategory'))
 app.use('/api/price-alert', require('./routes/api/priceAlert'))
 app.use('/api/search', require('./routes/api/search'))
-
+app.use('/api/keys', require('./routes/api/keys'))
 
 if (process.env.NODE_ENV === "production") {
     // set static folder

@@ -8,9 +8,9 @@ import { register } from "../../actions/auth"
 
 
 const Register = ({ setAlert, register, isAuthenticated }) => {
-    const [formData, setFormData] = useState({ name: "", email: "", password: "", password2: "" })
+    const [formData, setFormData] = useState({ name: "", email: "", key: "", password: "", password2: "" })
 
-    const { name, email, password, password2 } = formData;
+    const { name, email, key, password, password2 } = formData;
 
     const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value })
 
@@ -20,7 +20,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
             setAlert("Passwords do not match", "error", 3000)
         } else {
             try {
-                register({ name, email, password });
+                register({ name, email, key, password });
             } catch (err) {
                 console.log(err)
             }
@@ -61,6 +61,17 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
                                         <svg className="h-6 w-6" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor"><path d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" /></svg>
                                     </div>
                                     <input value={email} onChange={e => onChange(e)} required id="email" type="email" name="email" className="text-sm sm:text-base placeholder-gray-500 pl-10 pr-4 rounded-lg border border-gray-400 w-full py-2 focus:outline-none focus:border-blue-400" placeholder="E-Mail Address" />
+                                </div>
+                            </div>
+
+                            {/* Invite Key */}
+                            <div className="flex flex-col mb-6">
+                                <label htmlFor="email" className="mb-1 text-xs sm:text-sm tracking-wide text-gray-600">Invite key:</label>
+                                <div className="relative">
+                                    <div className="inline-flex items-center justify-center absolute left-0 top-0 h-full w-10 text-gray-400">
+                                        <svg className="h-6 w-6" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor"><path d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>
+                                    </div>
+                                    <input value={key} onChange={e => onChange(e)} required id="key" type="text" name="key" className="text-sm sm:text-base placeholder-gray-500 pl-10 pr-4 rounded-lg border border-gray-400 w-full py-2 focus:outline-none focus:border-blue-400" placeholder="Invite key" />
                                 </div>
                             </div>
 
