@@ -25,7 +25,7 @@ const getHTML = async (url) => {
     const html = await page.content()
     console.log(`page Length ${html.length}`)
 
-    // browser.close()
+    browser.close()
     return html
 }
 
