@@ -8,7 +8,7 @@ const ObjectId = require('mongoose').Types.ObjectId;
 const getProducts = require("../../services/getProducts")
 const getFilters = require("../../services/getFilters")
 const createProductLink = require("../../services/createProductLink")
-
+const getHTML = require("../../services/puppy")
 
 // const fs = require('fs');
 // var util = require('util')
@@ -23,9 +23,12 @@ router.post("/:categoryId", async (req, res) => {
         
         const {categoryChildId, categoryChild} = categoryChildren[0]
         const attributeIdLink = req.body.map(e => e.id).join("-")
-        
-        const request = await axios.get(createProductLink(categoryChildId, attributeIdLink))
-        const doc = createDom(request.data)
+
+        // console.log(createProductLink(categoryChildId, attributeIdLink))
+
+        const data = await getHTML(createProductLink(categoryChildId, attributeIdLink))
+        // const {data} = await axios.get(createProductLink(categoryChildId, attributeIdLink))
+        const doc = createDom(data)
         const products = getProducts(doc)
         const filters = getFilters(doc)
 

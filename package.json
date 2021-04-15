@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "description": "pAlarm",
   "main": "index.js",
+  "nodemonConfig": {
+    "ignore": [
+      "cookies.json"
+    ]
+  },
   "scripts": {
     "start": "node index",
     "server": "nodemon index",
@@ -19,6 +24,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "2captcha": "^2.1.6",
     "agent-base": "^6.0.2",
     "atomic-sleep": "^1.0.0",
     "axios": "^0.21.1",
@@ -38,6 +44,9 @@
     "mongoose": "^5.11.8",
     "nodemailer": "^6.4.17",
     "normalize-url": "^5.3.0",
+    "puppeteer": "^8.0.0",
+    "puppeteer-extra": "^3.1.18",
+    "puppeteer-extra-plugin-stealth": "^2.7.6",
     "random-useragent": "^0.5.0",
     "xmldom": "^0.4.0",
     "xpath": "0.0.32"

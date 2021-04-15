@@ -30,11 +30,7 @@ router.get("/:value", async (req, res) => {
     const formData = new FormData();
     formData.append("value", value)
     const request = await axios.post(searchPostBaseUrl, formData, { headers: formData.getHeaders() })
-    // const request = await scraperapiClient.post(searchPostBaseUrl, {headers: formData.getHeaders(), body: formData})
-    // const {data, ...other} = request
-    // console.log(formData,other)
-    
-    // console.log(header, request)
+
     const {data} = request
     const re = /https:\/\/www\.idealo\.de\/preisvergleich\/ProductCategory\/([0-9]+)[F]?.*/i
     const categoryChildId = data.match(re)

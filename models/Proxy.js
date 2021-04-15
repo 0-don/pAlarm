@@ -1,4 +1,6 @@
+
 const mongoose = require("mongoose");
+
 
 const ProxySchema = new mongoose.Schema({
     proxy: {
@@ -21,7 +23,11 @@ const ProxySchema = new mongoose.Schema({
     error: {
         type: Number,
         default: 0
+    },
+    state: {
+        type: Number,
+        default: 1
     }
 }, { timestamps: true })
 
-module.exports = Proxy = mongoose.model("proxy", ProxySchema)
+module.exports = ProxyModel = mongoose.model("proxy", ProxySchema)

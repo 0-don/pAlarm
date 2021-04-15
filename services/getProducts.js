@@ -22,7 +22,7 @@ const getProducts = (doc) => {
             productTitle: decode(productTitle.firstChild.data.trim()) || JSON.parse(productTitleAlt.value).productName,
             img: img.value,
             description: `${descriptionPart1?.firstChild?.data || ""}${descriptionPart2?.firstChild?.data || ""}`,
-            price: price?.lastChild?.data.trim() || priceAlt.lastChild.data.trim()
+            price: decode(price?.lastChild?.data.trim() || priceAlt.lastChild.data.trim())
         };
     });
 
