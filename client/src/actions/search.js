@@ -4,7 +4,7 @@ import { SEARCH, SEARCH_UPDATE } from "./types"
 
 export const search = (searchText, history) => async dispatch => {
     try {
-        const res = await axios.post("/api/search", {searchText})
+        const res = await axios.post("/api/search", { searchText })
         if (res.data.categoryChild) {
             history.push(`/product-category/${res.data.categoryChild}`);
         } else {
@@ -12,14 +12,14 @@ export const search = (searchText, history) => async dispatch => {
             history.push("/search");
         }
     } catch (error) {
-        
+
     }
 
 }
 
-export const searchUpdate = (value, history) => async dispatch => {
+export const searchUpdate = (searchTitle, url, history) => async dispatch => {
     try {
-        const res = await axios.get(`/api/search/${value}`)
+        const res = await axios.post(`/api/search/`, { searchTitle, url })
         if (res.data.categoryChild) {
             history.push(`/product-category/${res.data.categoryChild}`);
         } else {
@@ -28,6 +28,6 @@ export const searchUpdate = (value, history) => async dispatch => {
             dispatch({ type: SEARCH_UPDATE, payload: res.data })
         }
     } catch (error) {
-        
+
     }
 }

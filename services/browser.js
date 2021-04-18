@@ -2,10 +2,21 @@ const puppeteer = require('puppeteer-extra')
 const StealthPlugin = require('puppeteer-extra-plugin-stealth')
 const Captcha = require("2captcha")
 const fs = require('fs');
-
+const config = require("config")
+const searchBaseUrl = config.get("searchBaseUrl")
+const sleep = require("atomic-sleep")
 puppeteer.use(StealthPlugin())
 
 const cookiePath = './cookies.json'
+
+
+function encodeQueryData(data) {
+    const ret = [];
+    for (let d in data)
+        ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]));
+    return ret.join('&');
+}
+
 
 const getHTML = async (url) => {
 
@@ -29,12 +40,56 @@ const getHTML = async (url) => {
     return html
 }
 
+const searchHTML = async (url, searchTitle) => {
+    let browser = await puppeteer.launch({ headless: false, defaultViewport: null, slowMo: 30 });
+    let page = await browser.newPage();
+    await page.setJavaScriptEnabled(false)
+
+    await page.goto(url);
+
+    const redirects = [];
+
+    if (searchTitle) {
+        const client = await page.target().createCDPSession();
+        await client.send('Network.enable');
+        await client.on('Network.requestWillBeSent', (e) => {
+            if (e.type !== "Document") { return }
+            redirects.push(e.documentURL);
+        });
+        // const string = `[title="${searchTitle}"]`
+        // console.log(string)
+        // await page.click(string) // og
+
+        // const [button] = await page.$x(`//button/div[contains(., "${searchTitle}")]`);
+        // console.log(button)
+        // if (button) {
+        //     await button.click();
+        // }
+        client.
+        // console.log(await page.content())
+
+        // await page.click(`[title="${searchTitle}"][data-gtm-event="filter.click"]`) // new
+        client.
+        page.waitForNavigation()
+        console.log(redirects.length)
+        if (redirects.length > 0) { console.log("x"); await page.goto(redirects[1]) }
+    }
+
+    const currentUrl = await page.url()
+    const html = await page.content()
+    console.log(currentUrl, html.length)
+    // browser.close()
+    return { currentUrl, html }
+
+}
+// await page.goto(url);
+
+
 const blockContent = async (page) => {
     await page.setRequestInterception(true);
     page.on('request', (req) => {
         req.resourceType() == 'stylesheet' || req.resourceType() == 'font' || req.resourceType() == 'image' ? req.abort() : req.continue()
     });
-    console.log("content Blocked")
 }
 
 const setCookies = async (page) => {
@@ -42,14 +97,12 @@ const setCookies = async (page) => {
         const cookiesString = await fs.readFileSync(cookiePath);
         const cookies = JSON.parse(cookiesString);
         await page.setCookie(...cookies);
-        console.log("cookies Set")
     }
 }
 
 const saveCookies = async (page) => {
     const cookies = await page.cookies();
     fs.writeFileSync(cookiePath, JSON.stringify(cookies, null, 2))
-    console.log("cookies Saved")
 }
 
 const solveCaptcha = async (page) => {
@@ -64,4 +117,4 @@ const solveCaptcha = async (page) => {
     }
 }
 
-module.exports = getHTML
+module.exports = { getHTML, searchHTML }

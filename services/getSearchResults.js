@@ -24,18 +24,16 @@ const getSearchResults = async (doc) => {
             }, { "categoryChildren.$": 1 })
 
             // console.log(categoryChild.categoryChildren ? categoryChild.categoryChildren[0]._id : "")
-
+            
             return {
                 searchTitle: decode(searchTitle.firstChild.data.trim()),
-                searchImg: searchImg.value,
+                searchImg: searchImg?.value || "",
                 searchAmount: searchAmount.firstChild.data.trim(),
                 searchInputValue: searchInputValue?.value || "",
                 searchLink: categoryChild.categoryChildren ? categoryChild.categoryChildren[0]._id : ""
             };
         })
     );
-
-    // console.log(searchCategories)
     return searchCategories
 }
 
