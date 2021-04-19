@@ -24,10 +24,9 @@ router.post("/:categoryId", async (req, res) => {
         const {categoryChildId, categoryChild} = categoryChildren[0]
         const attributeIdLink = req.body.map(e => e.id).join("-")
 
-        // console.log(createProductLink(categoryChildId, attributeIdLink))
 
         const data = await browser.getHTML(createProductLink(categoryChildId, attributeIdLink))
-        // const {data} = await axios.get(createProductLink(categoryChildId, attributeIdLink))
+        
         const doc = createDom(data)
         const products = getProducts(doc)
         const filters = getFilters(doc)

@@ -22,8 +22,6 @@ const getSearchResults = async (doc) => {
             const categoryChild = !categoryChildId ? "" : await Category.findOne({
                 "categoryChildren": { "$elemMatch": { "categoryChildId": categoryChildId[1] } }
             }, { "categoryChildren.$": 1 })
-
-            // console.log(categoryChild.categoryChildren ? categoryChild.categoryChildren[0]._id : "")
             
             return {
                 searchTitle: decode(searchTitle.firstChild.data.trim()),

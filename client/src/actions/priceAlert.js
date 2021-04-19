@@ -9,9 +9,7 @@ import {
 
 export const createAlertFromLink = (link, targetPrice) => async dispatch => {
     try {
-        console.log(link, targetPrice)
         const res = await axios.post(`/api/price-alert/alert-from-link`, {link, targetPrice})
-        console.log(res)
         dispatch({ type: CREATE_PRICE_ALERT, payload: res.data })
         dispatch(setAlert("Price alert created from Link", "success"))
     } catch (err) {

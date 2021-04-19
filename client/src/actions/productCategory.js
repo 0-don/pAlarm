@@ -11,8 +11,8 @@ export const getProducts = (categoryId, attributes = []) => async dispatch => {
         const res = await axios.post(`/api/product-category/${categoryId}`, attributes)
 
         dispatch({ type: GET_PRODUCTS, payload: res.data })
-    } catch (error) {
-        console.log(error)
+    } catch (err) {
+        console.log(err)
     }
 }
 

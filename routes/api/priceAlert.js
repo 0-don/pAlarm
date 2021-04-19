@@ -90,7 +90,6 @@ router.delete("/:id", auth, async (req, res) => {
 router.put("/", auth, async (req, res) => {
     try {
         const { updateId, targetPrice, attributes } = req.body
-        // console.log(attributes)
         const updatedPriceAlert = await PriceAlert.findOneAndUpdate({ _id: updateId }, { targetPrice, attributes })
         res.json(updatedPriceAlert)
     } catch (error) {

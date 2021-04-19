@@ -36,7 +36,6 @@ router.post("/", [
         if(!isMatch) return res.status(400).json({ errors: [{msg: "Invalid Credentials"}]})
 
         const payload = { user: { id: user.id}}
-        console.log(payload)
         jwt.sign(payload, config.get("jwtSecret"), {expiresIn: 360000 }, (err, token) => {
             if(err) throw err;
             res.json({token})

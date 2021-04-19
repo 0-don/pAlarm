@@ -21,7 +21,6 @@ const ProductCategory = ({
     history,
     match }) => {
 
-    // console.log(priceAlert)
 
     const [targetPrice, setTargetPrice] = useState(updatePrice ? updatePrice : 0)
     const [isOn, setIsOn] = useState([])

@@ -22,39 +22,6 @@ function encodeQueryData(data) {
     return ret.join('&');
  }
 
-
-
-// router.get("/:value", async (req, res) => {
-
-//     const { value } = req.params
-
-//     const formData = new FormData();
-//     formData.append("value", value)
-//     const request = await axios.post(searchPostBaseUrl, formData, { headers: formData.getHeaders() })
-
-//     const {data} = request
-//     const re = /https:\/\/www\.idealo\.de\/preisvergleich\/ProductCategory\/([0-9]+)[F]?.*/i
-//     const categoryChildId = data.match(re)
-//     console.log(value)
-//     if (categoryChildId) {
-
-//         const { categoryChildren } = await Category.findOne({
-//             "categoryChildren": { "$elemMatch": { "categoryChildId": categoryChildId[1] } }
-//         }, { "categoryChildren.$": 1 })
-
-//         res.json({ "categoryChild": categoryChildren[0]._id })
-
-//     } else {
-
-//         const doc = createDom(request.data)
-//         const searchCategories = getSearchResults(doc)
-    
-//         res.json(await searchCategories)
-
-//     }
-
-// })
-
 router.post("/", async (req, res) => {
 
     let { searchText, searchTitle, url } = req.body
@@ -77,87 +44,9 @@ router.post("/", async (req, res) => {
     } else {
         const doc = createDom(html)
         const searchCategories = await getSearchResults(doc)
-        if(searchCategories.length === 0) console.log(html)
         res.json({searchCategories, url})
 
     }
-})
-
-
-// router.post("/", async (req, res) => {
-
-//     const { searchText } = req.body
-
-//     const url = `${searchBaseUrl}?${encodeQueryData({ q: searchText || "laptop" })}`
-//     // console.log(url)
-//     const request = await axios.get(url)
-
-//     const {data} = request
-//     const re = /https:\/\/www\.idealo\.de\/preisvergleich\/ProductCategory\/([0-9]+)[F]?.*/i
-//     const categoryChildId = data.match(re)
-
-//     // console.log( categoryChildId[1])
-//     console.log(searchText)
-//     if (categoryChildId) {
-
-//         const { categoryChildren } = await Category.findOne({
-//             "categoryChildren": { "$elemMatch": { "categoryChildId": categoryChildId[1] } }
-//         }, { "categoryChildren.$": 1 })
-
-//         res.json({ "categoryChild": categoryChildren[0]._id })
-
-//     } else {
-
-//         const doc = createDom(request.data)
-//         const searchCategories = getSearchResults(doc)
-
-//         res.json(await searchCategories)
-
-//     }
-
-// })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-router.get("/", async (req, res) => {
-
-    const request = await axios.get(searchBaseUrl, { params: { q: "q" } })
-
-    const {responseUrl} = request.request.res
-    const re = /https:\/\/www\.idealo\.de\/preisvergleich\/ProductCategory\/([0-9]+)[F]?.*/i
-    const categoryChildId = responseUrl.match(re)
-
-    if (categoryChildId) {
-
-        const { categoryChildren } = await Category.findOne({
-            "categoryChildren": { "$elemMatch": { "categoryChildId": categoryChildId[1] } }
-        }, { "categoryChildren.$": 1 })
-
-        res.json({ "categoryChild": categoryChildren[0]._id })
-
-    } else {
-
-        const doc = createDom(request.data)
-        const searchCategories = getSearchResults(doc)
-        res.json(await searchCategories)
-
-    }
-
 })
 
 module.exports = router
