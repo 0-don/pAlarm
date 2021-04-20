@@ -2,8 +2,11 @@ const puppeteer = require('puppeteer-extra')
 const StealthPlugin = require('puppeteer-extra-plugin-stealth')
 const Captcha = require("2captcha")
 const fs = require('fs');
+const path = require('path');
+
 puppeteer.use(StealthPlugin())
-const cookiePath = './cookies.json'
+
+const cookiePath = path.join('./cookies.json');
 
 const getHTML = async (url) => {
 
