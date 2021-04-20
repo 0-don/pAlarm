@@ -1,14 +1,10 @@
 const express = require("express")
-const axios = require("axios")
 const router = express.Router();
 const auth = require("../../middleware/auth");
-const { parse, stringify } = require('flatted');
 
-const FormData = require('form-data');
 const createDom = require("../../utils/createDom")
 const config = require("config")
 const searchBaseUrl = config.get('searchBaseUrl');
-const searchPostBaseUrl = config.get("searchPostBaseUrl")
 
 const Category = require("../../models/Category")
 
@@ -33,6 +29,8 @@ router.post("/", async (req, res) => {
 
     const re = /https:\/\/www\.idealo\.de\/preisvergleich\/ProductCategory\/([0-9]+)[F]?.*/i
     const categoryChildId = currentUrl.match(re)
+    // console.log(html)
+    if (html.includes("konnten wir leider nicht finden")) return res.status(400).json({ msg: "Nothing found, try again." })
 
     if (categoryChildId) {
         const { categoryChildren } = await Category.findOne({

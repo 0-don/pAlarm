@@ -1,33 +1,36 @@
 import axios from "axios"
-import { SEARCH, SEARCH_UPDATE } from "./types"
+import { setAlert } from "./alert"
+import { SEARCH, SEARCH_UPDATE, SEARCH_LOAD } from "./types"
 
 
 export const search = (searchText, history) => async dispatch => {
+    history.push("/search");
+    dispatch({ type: SEARCH_LOAD })
     try {
         const res = await axios.post("/api/search", { searchText })
         if (res.data.categoryChild) {
             history.push(`/product-category/${res.data.categoryChild}`);
         } else {
             dispatch({ type: SEARCH, payload: res.data })
-            history.push("/search");
         }
-    } catch (error) {
-
+    } catch (err) {
+        const error = err.response.data
+        if(error) dispatch(setAlert(error.msg, "error"))
     }
 
 }
 
 export const searchUpdate = (searchTitle, url, history) => async dispatch => {
+    history.push("/search");
+    dispatch({ type: SEARCH_LOAD })
     try {
         const res = await axios.post(`/api/search/`, { searchTitle, url })
         if (res.data.categoryChild) {
             history.push(`/product-category/${res.data.categoryChild}`);
         } else {
-            // dispatch({ type: SEARCH, payload: res.data })
-            // history.push("/search");
             dispatch({ type: SEARCH_UPDATE, payload: res.data })
         }
-    } catch (error) {
+    } catch (err) {
 
     }
 }

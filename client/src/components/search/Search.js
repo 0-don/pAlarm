@@ -2,8 +2,9 @@ import React, { Fragment } from 'react'
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom"
 import { searchUpdate } from "../../actions/search"
+import Spinner from "../layout/Spinner"
 
-const Search = ({ searchCategories, url, searchUpdate }) => {
+const Search = ({ searchCategories, url, searchUpdate, loading }) => {
     let history = useHistory();
 
     const searchClick = (searchTitle, url, searchLink) => {
@@ -14,7 +15,7 @@ const Search = ({ searchCategories, url, searchUpdate }) => {
         }
     }
 
-    return (
+    return loading ? <Spinner /> :
         <Fragment>
             <section className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
                 <div className="flex flex-wrap -m-2">
@@ -32,12 +33,13 @@ const Search = ({ searchCategories, url, searchUpdate }) => {
                 </div>
             </section>
         </Fragment>
-    )
+    
 }
 
 const mapStateToProps = ({ search }) => ({
     searchCategories: search.searchCategories,
-    url: search.url
+    url: search.url,
+    loading: search.loading
 })
 
 export default connect(mapStateToProps, { searchUpdate })(Search)

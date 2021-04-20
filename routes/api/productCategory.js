@@ -1,6 +1,5 @@
 const express = require("express")
 const router = express.Router()
-const axios = require("axios")
 const createDom = require("../../utils/createDom")
 
 const Category = require("../../models/Category")
@@ -38,19 +37,5 @@ router.post("/:categoryId", async (req, res) => {
     }
 });
 
-router.get("/", async(req, res) => {
-    try {
-        const { data } = await axios.get("https://www.idealo.de/preisvergleich/ProductCategory/15197.html?sortKey=minPrice")
-        const doc = createDom(data)
-
-        const products = getProducts(doc)
-        const filters = getFilters(doc)
-
-        res.json({ products: products, filters: filters });
-    } catch (err) {
-        console.log(err);
-        res.status(500).send("Server Error")
-    }
-});
 
 module.exports = router 

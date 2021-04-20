@@ -1,6 +1,6 @@
-import { SEARCH, SEARCH_UPDATE } from "../actions/types"
+import { SEARCH, SEARCH_UPDATE, SEARCH_LOAD } from "../actions/types"
 
-const initialState = {  
+const initialState = {
     searchCategories: null,
     url: null,
     loading: true
@@ -16,6 +16,12 @@ export const search = (state = initialState, action) => {
                 searchCategories: payload.searchCategories,
                 url: payload.url,
                 loading: false
+            }
+        case SEARCH_LOAD:
+            return {
+                searchCategories: null,
+                url: null,
+                loading: true
             }
         default:
             return state

@@ -1,6 +1,7 @@
 import _ from "lodash"
 import {
     GET_PRODUCTS,
+    GET_PRODUCTS_LOAD,
     DELETE_ATTRIBUTE,
     ADD_ATTRIBUTE,
     EDIT_PRICE_ALERT,
@@ -60,6 +61,11 @@ const productCategory = (state = intialState, action) => {
                 filters: [],
                 attributes: [],
                 loading: false
+            }
+        case GET_PRODUCTS_LOAD: 
+            return {
+                ...state,
+                loading: true
             }
         default:
             return state

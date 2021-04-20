@@ -68,8 +68,8 @@ const ProductCategory = ({
         return newTagValues.length - selectedAttributes.length
     }
 
-    return loading ? <Spinner /> :
-        <Fragment>
+    return (
+        <Fragment >
             <section className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
 
                 <div className="flex justify-between items-center mx-3">
@@ -103,19 +103,20 @@ const ProductCategory = ({
                             </div>
                         ))}
                     </div >
-
-                    <div className="md:w-9/12 w-full">
-                        <div className="p-4 flex flex-wrap -mx-1 lg:-mx-4">
-                            {products.map(product => (
-                                <ProductItem key={product.index} product={product} />
-                            ))}
+                    {loading ? <Spinner /> :
+                        <div className="md:w-9/12 w-full">
+                            <div className="p-4 flex flex-wrap -mx-1 lg:-mx-4">
+                                {products.map(product => (
+                                    <ProductItem key={product.index} product={product} />
+                                ))}
+                            </div>
                         </div>
-                    </div>
-
+                    }
                 </div >
             </section >
 
         </Fragment >
+    )
 }
 
 const mapStateToProps = state => ({

@@ -1,12 +1,15 @@
 import axios from "axios";
 import {
     GET_PRODUCTS,
+    GET_PRODUCTS_LOAD,
     DELETE_ATTRIBUTE,
     ADD_ATTRIBUTE,
     EMPTY_PRODUCT_STATE
 } from "./types"
 
 export const getProducts = (categoryId, attributes = []) => async dispatch => {
+
+    dispatch({ type: GET_PRODUCTS_LOAD })
     try {
         const res = await axios.post(`/api/product-category/${categoryId}`, attributes)
 
@@ -17,7 +20,7 @@ export const getProducts = (categoryId, attributes = []) => async dispatch => {
 }
 
 export const changeAttributes = (attributes, currentAttribute) => async dispatch => {
-
+    dispatch({ type: GET_PRODUCTS_LOAD })
     if (attributes.some(attribute => attribute.id === currentAttribute.id)) {
         dispatch({ type: DELETE_ATTRIBUTE, payload: currentAttribute.id })
     } else {
