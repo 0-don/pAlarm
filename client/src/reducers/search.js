@@ -1,4 +1,4 @@
-import { SEARCH, SEARCH_UPDATE, SEARCH_LOAD } from "../actions/types"
+import { SEARCH, SEARCH_UPDATE, SEARCH_LOAD, SEARCH_LOAD_FALSE} from "../actions/types"
 
 const initialState = {
     searchCategories: null,
@@ -22,6 +22,12 @@ export const search = (state = initialState, action) => {
                 searchCategories: null,
                 url: null,
                 loading: true
+            }
+        case SEARCH_LOAD_FALSE:
+            return {
+                searchCategories: null,
+                url: null,
+                loading: false
             }
         default:
             return state

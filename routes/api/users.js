@@ -23,6 +23,8 @@ router.post("/", [
 
     try {
         let dbKey = await Keys.findOne({ key })
+
+        if (!dbKey) return res.status(400).json({errors: [{msg: "Key is not valid"}]})
         if (dbKey.user) return res.status(400).json({errors: [{msg: "Key is not valid"}]})
 
         let user = await User.findOne({email})
