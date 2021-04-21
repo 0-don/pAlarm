@@ -5,7 +5,7 @@ import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
 
 
-const PriceAlert = ({ getPriceAlerts, priceAlert, deletePriceAlert, editPriceAlert, createAlertFromLink, history }) => {
+const PriceAlert = ({ getPriceAlerts, priceAlert, deletePriceAlert, editPriceAlert, createAlertFromLink, history, auth: {user} }) => {
     dayjs.extend(relativeTime)
 
     const [link, setLink] = useState("")
@@ -21,9 +21,15 @@ const PriceAlert = ({ getPriceAlerts, priceAlert, deletePriceAlert, editPriceAle
         })
         return values.join(", ")
     }
-    
+
     return (
         <section className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+            
+            <div className="flex justify-between items-center">
+                <h1 className="text-2xl md:text-4xl font-bold leading-tight text-gray-900">Price Alert</h1>
+                {priceAlert && user ? <h2 className="text-1xl md:text-3xl font-bold leading-tight text-gray-900">Alerts: <span className={`${priceAlert.length >= user.priceAlert ? "text-red-600" : "text-green-600"}`}>{`${priceAlert.length} / ${user.priceAlert}`}</span></h2> : "" }
+            </div>
+
 
             <div className="flex justify-between items-end flex-wrap">
 
@@ -67,7 +73,7 @@ const PriceAlert = ({ getPriceAlerts, priceAlert, deletePriceAlert, editPriceAle
                         <div className="flex-1 flex flex-col md:flex-row">
 
                             <div className="flex flex-col mb-4 ">
-                                <span className="text-lg font-bold">{categoryChild || categoryChildId }</span>
+                                <span className="text-lg font-bold">{categoryChild || categoryChildId}</span>
 
                                 <div className="flex-1 flex flex-col mt-6 ">
                                     <div className="flex my-1 ">
@@ -127,6 +133,7 @@ const PriceAlert = ({ getPriceAlerts, priceAlert, deletePriceAlert, editPriceAle
 }
 
 const mapStateToProps = state => ({
+    auth: state.auth,
     priceAlert: state.priceAlert.priceAlert,
 })
 

@@ -3,7 +3,7 @@ const router = express.Router()
 
 
 const Category = require("../../models/Category")
-const getCategories = require("../../services/getCategories")
+const getCategories = require("../../services/html/getCategories")
 
 //Get All Categories
 router.get("/", async (req, res) => {

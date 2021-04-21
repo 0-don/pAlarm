@@ -8,7 +8,7 @@ const searchBaseUrl = config.get('searchBaseUrl');
 
 const Category = require("../../models/Category")
 
-const getSearchResults = require("../../services/getSearchResults")
+const getSearchResults = require("../../services/html/getSearchResults")
 const browser = require("../../services/browser")
 
 function encodeQueryData(data) {

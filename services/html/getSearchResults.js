@@ -1,9 +1,9 @@
 const xpath = require('xpath')
 const { decode } = require("html-entities")
 const sleep = require('atomic-sleep')
-const { SEARCH_NODES, SEARCH_TITLE, SEARCH_IMAGE, SEARCH_AMOUNT, SEARCH_INPUT_VALUE, SEARCH_LINK } = require("../utils/xpathTypes")
+const { SEARCH_NODES, SEARCH_TITLE, SEARCH_IMAGE, SEARCH_AMOUNT, SEARCH_INPUT_VALUE, SEARCH_LINK } = require("../../utils/xpathTypes")
 
-const Category = require("../models/Category")
+const Category = require("../../models/Category")
 
 const getSearchResults = async (doc) => {
 

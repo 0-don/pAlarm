@@ -1,9 +1,9 @@
 const _ = require("lodash")
 const axios = require('axios');
-const createDom = require("../utils/createDom")
+const createDom = require("../../utils/createDom")
 const xpath = require('xpath')
 
-const Category = require("../models/Category")
+const Category = require("../../models/Category")
 
 
 const getCategory = async () => {

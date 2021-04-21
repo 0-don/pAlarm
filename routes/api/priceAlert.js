@@ -8,12 +8,13 @@ const axios = require("axios")
 const fs = require('fs');
 const createDom = require("../../utils/createDom")
 
-const getProducts = require("../../services/getProducts")
-const getFilters = require("../../services/getFilters")
-const getTitle = require("../../services/getTitle")
+const getProducts = require("../../services/html/getProducts")
+const getFilters = require("../../services/html/getFilters")
+const getTitle = require("../../services/html/getTitle")
+
 const createProductLink = require("../../services/createProductLink")
-const createHtmlTemplate = require("../../services/createHtmlTemplate")
-const sendMail = require("../../services/sendMail")
+const createHtmlTemplate = require("../../services/email/createHtmlTemplate")
+const sendMail = require("../../services/email/sendMail")
 const httpRequest = require("../../services/httpRequest")
 
 const Category = require("../../models/Category")

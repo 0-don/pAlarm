@@ -7,7 +7,7 @@ import { search } from "../../actions/search"
 
 import logo from "../../img/clocks.png"
 
-const Navbar = ({ logout, search, loadUser, auth: { isAuthenticated } }) => {
+const Navbar = ({ logout, search, loadUser, auth: { isAuthenticated, user } }) => {
 
     useEffect(() => {
         loadUser();
@@ -51,7 +51,7 @@ const Navbar = ({ logout, search, loadUser, auth: { isAuthenticated } }) => {
                             </div>
                             <div className="hidden lg:block lg:ml-6">
                                 <div className="flex space-x-4">
-                                    <Link onClick={() => { setmenuIcon(false); setProfileIcon(false) }} to="/" className="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium">Home</Link>
+                                    <Link onClick={() => { setmenuIcon(false); setProfileIcon(false) }} to="/" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Home</Link>
                                     <Link onClick={() => { setmenuIcon(false); setProfileIcon(false) }} to="/categories" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Categories</Link>
                                     <Link onClick={() => { setmenuIcon(false); setProfileIcon(false) }} to="/price-alert" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Price Alert</Link>
                                 </div>
@@ -96,7 +96,7 @@ const Navbar = ({ logout, search, loadUser, auth: { isAuthenticated } }) => {
                                     <div>
                                         <button onClick={() => setProfileIcon(!profileIcon)} className="bg-gray-800 rounded-full flex text-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white" id="user-menu" aria-haspopup="true">
                                             <span className="sr-only">Open user menu</span>
-                                            <img className="h-8 w-8 rounded-full" src="https://i.pinimg.com/originals/73/ad/b8/73adb88b8d74ccddf815cb00ba8dee82.png" alt="" />
+                                            <img className="h-8 w-8 rounded-full" src="https://picsum.photos/200" alt="" />
                                         </button>
                                     </div>
                                     <div className={`${profileIcon ? "" : "hidden"} origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5`} role="menu" aria-orientation="vertical" aria-labelledby="user-menu">
@@ -117,11 +117,11 @@ const Navbar = ({ logout, search, loadUser, auth: { isAuthenticated } }) => {
                     <div className="pt-4 pb-3 border-t border-gray-700">
                         <div className="flex items-center px-5">
                             <div className="flex-shrink-0">
-                                <img className="h-10 w-10 rounded-full" src="https://i.pinimg.com/originals/73/ad/b8/73adb88b8d74ccddf815cb00ba8dee82.png" alt="" />
+                                <img className="h-10 w-10 rounded-full" src="https://picsum.photos/200" alt="" />
                             </div>
                             <div className="ml-3">
-                                <div className="text-base font-medium text-white">Price Alert</div>
-                                <div className="text-sm font-medium text-gray-400">price-alert@price-alert.com</div>
+                                <div className="text-base font-medium text-white">{user?.name || ""}</div>
+                                <div className="text-sm font-medium text-gray-400">{user?.email || ""}</div>
                             </div>
                             <button className="ml-auto flex-shrink-0 bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                                 <span className="sr-only">View notifications</span>

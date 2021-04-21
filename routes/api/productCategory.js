@@ -4,8 +4,8 @@ const createDom = require("../../utils/createDom")
 
 const Category = require("../../models/Category")
 const ObjectId = require('mongoose').Types.ObjectId;
-const getProducts = require("../../services/getProducts")
-const getFilters = require("../../services/getFilters")
+const getProducts = require("../../services/html/getProducts")
+const getFilters = require("../../services/html/getFilters")
 const createProductLink = require("../../services/createProductLink")
 const browser = require("../../services/browser")
 

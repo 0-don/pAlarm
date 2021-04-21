@@ -1,7 +1,7 @@
 const xpath = require('xpath')
 const { decode } = require("html-entities")
 const sleep = require('atomic-sleep')
-const { PRODUCT_NODES, PRODUCT_TITLE, PRODUCT_TITLE_ALT, PRODUCT_IMAGE, PRODUCT_IMAGE_ALT, DESCRIPTION_PART_1, DESCRIPTION_PART_2, PRICE, PRICE_ALT } = require("../utils/xpathTypes")
+const { PRODUCT_NODES, PRODUCT_TITLE, PRODUCT_TITLE_ALT, PRODUCT_IMAGE, PRODUCT_IMAGE_ALT, DESCRIPTION_PART_1, DESCRIPTION_PART_2, PRICE, PRICE_ALT } = require("../../utils/xpathTypes")
 
 const getProducts = (doc) => {
 

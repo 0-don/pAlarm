@@ -12,7 +12,7 @@ const {
     AVAILABLE_NODE,
     AVAILABLE_TITLE,
     AVAILABLE_VALUE,
-    AVAILABLE_AMOUNT } = require("../utils/xpathTypes")
+    AVAILABLE_AMOUNT } = require("../../utils/xpathTypes")
 
 const getFilters = (doc) => {
     const filterNodes = xpath.select(FILTER_NODES, doc)
