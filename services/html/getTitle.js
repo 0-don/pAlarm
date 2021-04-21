@@ -1,6 +1,4 @@
 const xpath = require('xpath')
-const { decode } = require("html-entities")
-const sleep = require('atomic-sleep')
 const { PRODUCT_CATEGORY_TITLE } = require("../../utils/xpathTypes")
 
 const getTitle = (doc) => {
