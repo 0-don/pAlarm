@@ -10,7 +10,7 @@ const cookiePath = path.join('./cookies.json');
 
 const getHTML = async (url) => {
 
-    let browser = await puppeteer.launch({ headless: true, defaultViewport: null, args: ['--disable-dev-shm-usage'] });
+    let browser = await puppeteer.launch({ headless: true, defaultViewport: null, args: ['--disable-dev-shm-usage', '--no-sandbox', '--disable-setuid-sandbox', '--disable-accelerated-2d-canvas', '--no-first-run', '--no-zygote', '--single-process', '--disable-gpu'] });
     let page = await browser.newPage();
 
     await blockContent(page)
@@ -21,7 +21,6 @@ const getHTML = async (url) => {
     await solveCaptcha(page)
     await saveCookies(page)
 
-    await page.waitForSelector('[class="pageFooter-climateCertificateLogoClimateSeal"]')
     const html = await page.content()
 
     console.log(`getHTML ${html.length}`)
@@ -33,7 +32,7 @@ const getHTML = async (url) => {
 }
 
 const searchHTML = async (url, searchTitle) => {
-    let browser = await puppeteer.launch({ headless: true, defaultViewport: null, args: ['--disable-dev-shm-usage'] });
+    let browser = await puppeteer.launch({ headless: true, defaultViewport: null, args: ['--disable-dev-shm-usage', '--no-sandbox', '--disable-setuid-sandbox', '--disable-accelerated-2d-canvas', '--no-first-run', '--no-zygote', '--single-process', '--disable-gpu'] });
     let page = await browser.newPage();
 
     await blockContent(page)
@@ -44,12 +43,8 @@ const searchHTML = async (url, searchTitle) => {
     await solveCaptcha(page)
     await saveCookies(page)
 
-    if (searchTitle) {
-        await page.waitForSelector(`[title="${searchTitle}"][data-metric-click="cat-link-click"]`)
-        await page.click(`[title="${searchTitle}"][data-metric-click="cat-link-click"]`)
-    }
+    if (searchTitle) await Promise.all([page.waitForNavigation(), page.click(`[title="${searchTitle}"][data-metric-click="cat-link-click"]`)]);
 
-    await page.waitForSelector('[class="pageFooter-climateCertificateLogoClimateSeal"]')
     const currentUrl = await page.url()
     const html = await page.content()
 
@@ -67,9 +62,9 @@ const blockContent = async (page) => {
 
     await page.setJavaScriptEnabled(false)
     await page.setDefaultNavigationTimeout(0);
-    await page.setRequestInterception(true);
     await page.setViewport({ width: 1920, height: 1080 })
 
+    await page.setRequestInterception(true);
     page.on('request', (req) => {
         req.resourceType() == 'stylesheet' || req.resourceType() == 'font' || req.resourceType() == 'image' ? req.abort() : req.continue()
     });
@@ -96,7 +91,8 @@ const solveCaptcha = async (page) => {
         const solvedCaptcha = await solver.recaptcha(dataSitekey, page.url())
 
         await page.type('#g-recaptcha-response', solvedCaptcha.data)
-        await page.click(`input[value="weiter"]`)
+
+        await Promise.all([page.waitForNavigation(), page.click(`input[value="weiter"]`)]);
 
         console.log("captcha Solved")
     }
