@@ -11,7 +11,7 @@ const browserInstance = path.join('./browser.txt');
 
 const getHTML = async (url) => {
 
-    let browser = await createBrowser()
+    let browser = await puppeteer.launch({ headless: true, defaultViewport: null, args: ['--disable-dev-shm-usage', '--no-sandbox', '--disable-setuid-sandbox', '--disable-accelerated-2d-canvas', '--no-first-run', '--no-zygote', '--single-process', '--disable-gpu'] });
     let page = await browser.newPage();
 
     await blockContent(page)
@@ -27,13 +27,13 @@ const getHTML = async (url) => {
     console.log(`getHTML ${html.length}`)
 
     await page.close();
-    await await browser.disconnect();
+    await browser.close()
 
     return html
 }
 
 const searchHTML = async (url, searchTitle) => {
-    let browser = await createBrowser()
+    let browser = await puppeteer.launch({ headless: true, defaultViewport: null, args: ['--disable-dev-shm-usage', '--no-sandbox', '--disable-setuid-sandbox', '--disable-accelerated-2d-canvas', '--no-first-run', '--no-zygote', '--single-process', '--disable-gpu'] });
     let page = await browser.newPage();
 
     await blockContent(page)
@@ -50,29 +50,26 @@ const searchHTML = async (url, searchTitle) => {
     const html = await page.content()
 
     await page.close();
-    await await browser.disconnect();
+    await browser.close()
 
     console.log("searchHTML", html.length)
     return { currentUrl, html }
 
 }
 
-const createBrowser = async () => {
-    let headless = true
-    let defaultViewport = null
-    let args = ['--disable-dev-shm-usage', '--no-sandbox', '--disable-setuid-sandbox', '--disable-accelerated-2d-canvas', '--no-first-run', '--no-zygote', '--single-process', '--disable-gpu']
+const createBrowser = async() => {
     let browser
+    if (fs.existsSync(browserInstance)) {
 
-    try {
-        let browserWS = fs.readFileSync(browserInstance, "utf-8")
-        browser = await puppeteer.connect({ headless, defaultViewport, args, browserWSEndpoint: browserWS });
-    } catch (err) {
-        browser = await puppeteer.launch({ headless, defaultViewport, args });
     }
 
-    const browserWSEndpoint = await browser.wsEndpoint();
-    fs.writeFileSync(browserInstance, browserWSEndpoint, "utf-8")
-    return browser
+    let browser = await puppeteer.launch({ headless: true, defaultViewport: null, args: ['--disable-dev-shm-usage', '--no-sandbox', '--disable-setuid-sandbox', '--disable-accelerated-2d-canvas', '--no-first-run', '--no-zygote', '--single-process', '--disable-gpu'] });
+    await page.goto('https://www.idealo.de/');
+
+    var browserWSEndpoint = browser.wsEndpoint();
+
+    fs.writeFileSync("browser.txt", browserWSEndpoint, "utf-8")
+    browser.disconnect();
 }
 
 const blockContent = async (page) => {
