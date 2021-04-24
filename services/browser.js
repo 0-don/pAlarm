@@ -9,7 +9,7 @@ puppeteer.use(StealthPlugin())
 const cookiePath = path.join('./cookies.json');
 const browserInstance = path.join('./browser.txt');
 
-const getHTML = async (url) => {
+const getHTML = async (url, searchTitle) => {
 
     let browser = await createBrowser()
     let page = await browser.newPage();
@@ -22,14 +22,17 @@ const getHTML = async (url) => {
     await solveCaptcha(page)
     await saveCookies(page)
 
-    const html = await page.content()
+    if (searchTitle) await Promise.all([page.waitForNavigation(), page.click(`[title="${searchTitle}"][data-metric-click="cat-link-click"]`)]);
 
-    console.log(`getHTML ${html.length}`)
+    const html = await page.content()
+    const currentUrl = await page.url()
+
+    console.log(searchTitle ? `searchHTML ${html.length}` : `getHTML ${html.length}`)
 
     await page.close();
     await await browser.disconnect();
 
-    return html
+    return { currentUrl, html }
 }
 
 const searchHTML = async (url, searchTitle) => {

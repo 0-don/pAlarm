@@ -117,6 +117,10 @@ router.post("/", auth, async (req, res) => {
         let priceAlert = await PriceAlert.findOne({ user: req.user.id, link })
         if (priceAlert) return res.status(400).json({ msg: "Price Alert already exist" })
 
+        const user = await User.findById(req.user.id)
+        const priceAlerts = await PriceAlert.find({ user: req.user.id })
+        if (priceAlerts.length >= user.priceAlert) return res.status(400).json({ msg: "Price alert limit reached!" })
+
         priceAlert = new PriceAlert(priceAlertFields)
         await priceAlert.save()
 

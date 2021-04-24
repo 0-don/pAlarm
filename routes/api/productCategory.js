@@ -24,9 +24,10 @@ router.post("/:categoryId", async (req, res) => {
         const attributeIdLink = req.body.map(e => e.id).join("-")
 
 
-        const data = await browser.getHTML(createProductLink(categoryChildId, attributeIdLink))
+        const {currentUrl, html} = await browser.getHTML(createProductLink(categoryChildId, attributeIdLink))
+        if (html.includes('class="errorpage"')) return res.status(400).json({ msg: "Error, please try again." })
         
-        const doc = createDom(data)
+        const doc = createDom(html)
         const products = getProducts(doc)
         const filters = getFilters(doc)
 

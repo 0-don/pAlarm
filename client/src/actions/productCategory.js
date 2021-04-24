@@ -6,15 +6,17 @@ import {
     ADD_ATTRIBUTE,
     EMPTY_PRODUCT_STATE
 } from "./types"
+import { setAlert } from "./alert"
 
 export const getProducts = (categoryId, attributes = []) => async dispatch => {
 
     dispatch({ type: GET_PRODUCTS_LOAD })
     try {
         const res = await axios.post(`/api/product-category/${categoryId}`, attributes)
-
         dispatch({ type: GET_PRODUCTS, payload: res.data })
     } catch (err) {
+        const error = err.response.data
+        if(error) dispatch(setAlert(error.msg, "error"))
         console.log(err)
     }
 }

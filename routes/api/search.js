@@ -29,8 +29,9 @@ router.post("/", async (req, res) => {
 
     const re = /https:\/\/www\.idealo\.de\/preisvergleich\/ProductCategory\/([0-9]+)[F]?.*/i
     const categoryChildId = currentUrl.match(re)
-    // console.log(html)
+
     if (html.includes("konnten wir leider nicht finden")) return res.status(400).json({ msg: "Nothing found, try again." })
+    if (html.includes('class="errorpage"')) return res.status(400).json({ msg: "Error, please try again." })
 
     if (categoryChildId) {
         const { categoryChildren } = await Category.findOne({
