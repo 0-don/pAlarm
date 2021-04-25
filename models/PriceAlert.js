@@ -39,6 +39,6 @@ const PriceAlertSchema = new mongoose.Schema({
         }
     ],
     
-})
+}, { timestamps: true })
 
 module.exports = PriceAlert = mongoose.model("pricealert", PriceAlertSchema)
