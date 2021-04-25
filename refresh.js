@@ -43,7 +43,7 @@ const refresh = async () => {
         if (latestPrice <= alert.targetPrice) {
             const user = await User.findById(alert.user)
             const html = await createHtmlTemplate({ alert, products: products.filter(p => p.price <= alert.targetPrice) })
-            sendMail("don.cryptus@gmail.com", html)
+            sendMail(user.email, html)
         }
 
         const attributesList = filters.map(f => f.tagValues)
