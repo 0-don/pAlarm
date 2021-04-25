@@ -30,38 +30,15 @@ const getHTML = async (url, searchTitle) => {
     console.log(searchTitle ? `searchHTML ${html.length}` : `getHTML ${html.length}`)
 
     await page.close();
-    await await browser.disconnect();
+    await browser.disconnect();
+    // await browser.close();
 
-    return { currentUrl, html }
+    return { currentUrl, html, browser }
 }
 
-const searchHTML = async (url, searchTitle) => {
-    let browser = await createBrowser()
-    let page = await browser.newPage();
-
-    await blockContent(page)
-    await setCookies(page)
-
-    await page.goto(url);
-
-    await solveCaptcha(page)
-    await saveCookies(page)
-
-    if (searchTitle) await Promise.all([page.waitForNavigation(), page.click(`[title="${searchTitle}"][data-metric-click="cat-link-click"]`)]);
-
-    const currentUrl = await page.url()
-    const html = await page.content()
-
-    await page.close();
-    await await browser.disconnect();
-
-    console.log("searchHTML", html.length)
-    return { currentUrl, html }
-
-}
 
 const createBrowser = async () => {
-    let headless = true
+    let headless = false
     let defaultViewport = null
     let args = ['--disable-dev-shm-usage', '--no-sandbox', '--disable-setuid-sandbox', '--disable-accelerated-2d-canvas', '--no-first-run', '--no-zygote', '--single-process', '--disable-gpu']
     let browser
@@ -119,4 +96,4 @@ const solveCaptcha = async (page) => {
     }
 }
 
-module.exports = { getHTML, searchHTML }
+module.exports = { getHTML, createBrowser, blockContent, setCookies, saveCookies, solveCaptcha }

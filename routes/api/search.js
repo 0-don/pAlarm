@@ -18,13 +18,13 @@ function encodeQueryData(data) {
     return ret.join('&');
  }
 
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
 
     let { searchText, searchTitle, url } = req.body
 
     url = url || `${searchBaseUrl}?${encodeQueryData({ q: searchText })}`
     
-    const {html, currentUrl} = await browser.searchHTML(url, searchTitle)
+    const {html, currentUrl} = await browser.getHTML(url, searchTitle)
     url = currentUrl
 
     const re = /https:\/\/www\.idealo\.de\/preisvergleich\/ProductCategory\/([0-9]+)[F]?.*/i
