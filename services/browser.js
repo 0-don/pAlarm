@@ -38,7 +38,7 @@ const getHTML = async (url, searchTitle) => {
 
 
 const createBrowser = async () => {
-    let headless = false
+    let headless = true
     let defaultViewport = null
     let args = ['--disable-dev-shm-usage', '--no-sandbox', '--disable-setuid-sandbox', '--disable-accelerated-2d-canvas', '--no-first-run', '--no-zygote', '--single-process', '--disable-gpu']
     let browser
