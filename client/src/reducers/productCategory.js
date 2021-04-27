@@ -11,6 +11,7 @@ import {
 const intialState = {
     updateId: null,
     updatePrice: null,
+    margin: null,
     categoryChildId: null,
     categoryChild: null,
     products: [],
@@ -28,6 +29,7 @@ const productCategory = (state = intialState, action) => {
                 ...state,
                 updateId: payload._id,
                 updatePrice: payload.targetPrice,
+                margin: payload.marginPercent,
                 attributes: [...payload.attributes]
             }
         case GET_PRODUCTS:
@@ -57,6 +59,7 @@ const productCategory = (state = intialState, action) => {
                 updateId: null,
                 categoryChildId: null,
                 categoryChild: null,
+                margin: null,
                 products: [],
                 filters: [],
                 attributes: [],

@@ -27,6 +27,10 @@ const PriceAlertSchema = new mongoose.Schema({
     latestPrice: {
         type: Number,
     },
+    marginPercent: {
+        type: Number,
+        default: 0
+    },
     attributes: [
         {
             id: {

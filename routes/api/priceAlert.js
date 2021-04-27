@@ -87,8 +87,8 @@ router.delete("/:id", auth, async (req, res) => {
 //Update Price Alert
 router.put("/", auth, async (req, res) => {
     try {
-        const { updateId, targetPrice, attributes } = req.body
-        const updatedPriceAlert = await PriceAlert.findOneAndUpdate({ _id: updateId }, { targetPrice, attributes })
+        const { updateId, targetPrice, marginPercent, attributes } = req.body
+        const updatedPriceAlert = await PriceAlert.findOneAndUpdate({ _id: updateId }, { targetPrice, marginPercent, attributes })
         res.json(updatedPriceAlert)
     } catch (error) {
 
@@ -98,7 +98,7 @@ router.put("/", auth, async (req, res) => {
 //Create Price Alert
 router.post("/", auth, async (req, res) => {
 
-    const { categoryChildDbId, categoryChildId, categoryChild, targetPrice, attributes } = req.body
+    const { categoryChildDbId, categoryChildId, categoryChild, targetPrice, marginPercent, attributes } = req.body
 
     const attributeIdLink = attributes.map(e => e.id).join("-")
     const link = createProductLink(categoryChildId, attributeIdLink)
@@ -111,6 +111,7 @@ router.post("/", auth, async (req, res) => {
     priceAlertFields.categoryChild = categoryChild
     priceAlertFields.link = link
     priceAlertFields.targetPrice = targetPrice
+    priceAlertFields.marginPercent = marginPercent
     priceAlertFields.attributes = attributes
 
     try {
@@ -132,7 +133,10 @@ router.post("/", auth, async (req, res) => {
     }
 })
 
-
+// router.get("/re", async (req, res) => {
+//     let priceAlerts = await PriceAlert.updateMany({}, {"$set":{"marginPercent": 0}});
+//     res.json(priceAlerts)
+// })
 
 
 module.exports = router

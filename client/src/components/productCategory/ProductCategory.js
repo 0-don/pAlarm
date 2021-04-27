@@ -11,7 +11,7 @@ import Spinner from "../layout/Spinner"
 
 
 const ProductCategory = ({
-    productCategory: { updateId, updatePrice, categoryChildId, categoryChild, products, filters, loading, attributes },
+    productCategory: { updateId, updatePrice, margin, categoryChildId, categoryChild, products, filters, loading, attributes },
     getProducts,
     emptyProductState,
     createPriceAlert,
@@ -23,6 +23,7 @@ const ProductCategory = ({
 
 
     const [targetPrice, setTargetPrice] = useState(updatePrice ? updatePrice : 0)
+    const [marginPercent, setMarginPercent] = useState(margin ? margin : "")
     const [isOn, setIsOn] = useState([])
 
 
@@ -48,13 +49,13 @@ const ProductCategory = ({
     const updateCreateButton = () => {
         if (updateId) {
             return (
-                <button onClick={() => updatePriceAlert(updateId, targetPrice, attributes, history)} className="border-2 border-blue-500 font-bold text-blue-500 px-2 py-2 transition duration-300 ease-in-out hover:bg-blue-500 hover:text-white mr-6">
+                <button onClick={() => updatePriceAlert(updateId, targetPrice, marginPercent, attributes, history)} className="border-2 border-blue-500 font-bold text-blue-500 px-2 py-2 transition duration-300 ease-in-out hover:bg-blue-500 hover:text-white mr-6">
                     Update
                 </button>
             )
         } else {
             return (
-                <button onClick={() => createPriceAlert({ categoryChildDbId: match.params.id, categoryChildId, categoryChild, targetPrice, attributes })} className={`${priceAlert.some(e => _.isEqual(e.attributes, attributes) && categoryChildId === e.categoryChildId) ? "bg-red-600" : "bg-gray-600"} uppercase p-3 flex items-center  text-blue-50 max-w-max shadow-sm hover:shadow-lg rounded-full w-12 h-12`}>
+                <button onClick={() => createPriceAlert({ categoryChildDbId: match.params.id, categoryChildId, categoryChild, targetPrice, marginPercent, attributes })} className={`${priceAlert.some(e => _.isEqual(e.attributes, attributes) && categoryChildId === e.categoryChildId) ? "bg-red-600" : "bg-gray-600"} uppercase p-3 flex items-center  text-blue-50 max-w-max shadow-sm hover:shadow-lg rounded-full w-12 h-12`}>
                     <svg width="64" height="64" viewBox="0 0 24 20" style={{ transform: "rotate(360deg)" }}><path fill="currentColor" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
                 </button>
             )
@@ -79,7 +80,10 @@ const ProductCategory = ({
                             <div className="inline-flex items-center justify-center absolute left-0 top-0 h-full w-10 text-gray-400">
                                 <svg className="h-6 w-6" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor"><path d="M14.121 15.536c-1.171 1.952-3.07 1.952-4.242 0-1.172-1.953-1.172-5.119 0-7.072 1.171-1.952 3.07-1.952 4.242 0M8 10.5h4m-4 3h4m9-1.5a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                             </div>
-                            <input value={targetPrice} onChange={(e) => setTargetPrice(e.target.value)} id="targetPrice" type="number" name="targetPrice" className="text-sm sm:text-base placeholder-gray-500 pl-10 pr-1 rounded-lg border border-gray-400 w-28 py-2 focus:outline-none focus:border-blue-400" placeholder="min. Euro" />
+                            <input value={targetPrice} onChange={(e) => setTargetPrice(e.target.value)} id="targetPrice" type="number" name="targetPrice" className="text-sm sm:text-base placeholder-gray-500 pl-10 pr-1 rounded-lg border border-gray-400 w-24 py-2 focus:outline-none focus:border-blue-400" placeholder="min. Euro" />
+                        </div>
+                        <div className="relative mr-1">
+                            <input value={marginPercent} onChange={(e) => setMarginPercent(e.target.value)} id="marginPercent" type="number" name="marginPercent" min="0" max="100" className="text-sm sm:text-base placeholder-gray-500 pl-3 pr-1 rounded-lg border border-gray-400 w-12 py-2 focus:outline-none focus:border-blue-400" placeholder="0%" />
                         </div>
                         {updateCreateButton()}
                     </div>

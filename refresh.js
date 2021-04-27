@@ -40,9 +40,11 @@ const refresh = async () => {
         products.forEach(p => p.price = p.price.replace(/,.*/, '').replace(".", "").replace(".", ""))
         const latestPrice = products[0].price
 
-        if (latestPrice <= alert.targetPrice) {
+        const targetPlusMargin = alert.targetPrice +  alert.targetPrice / 100 * alert.marginPercent
+
+        if (latestPrice <= targetPlusMargin) {
             const user = await User.findById(alert.user)
-            const html = await createHtmlTemplate({ alert, products: products.filter(p => p.price <= alert.targetPrice) })
+            const html = await createHtmlTemplate({ alert, products: products.filter(p => p.price <= targetPlusMargin) })
             sendMail(user.email, html)
         }
 
