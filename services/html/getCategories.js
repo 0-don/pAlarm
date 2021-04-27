@@ -1,5 +1,4 @@
 const _ = require("lodash")
-const axios = require('axios');
 const createDom = require("../../utils/createDom")
 const xpath = require('xpath')
 const browser = require("../browser")
@@ -9,8 +8,8 @@ const Category = require("../../models/Category")
 const getCategory = async () => {
     await Category.deleteMany()
 
-    const data = await browser.getHTML("https://www.idealo.de/preisvergleich/Sitemap.html")
-    const doc = createDom(data)
+    const { html } = await browser.getHTML("https://www.idealo.de/preisvergleich/Sitemap.html")
+    const doc = createDom(html)
 
     //Get Category Links
     const categoryLinksNodes = xpath.select(`//*[contains(@class, "fl-right")]`, doc)
@@ -20,10 +19,12 @@ const getCategory = async () => {
         return { categoryId, link: `https://www.idealo.de/preisvergleich/${link.value}` }
     })
 
+    // console.log(categories)
+
     //Get Parent Category & Title & Link
     categories.forEach(async ({ categoryId, link }) => {
-        const data = await browser.getHTML(link)
-        const doc = createDom(data)
+        const { html } = await browser.getHTML(link)
+        const doc = createDom(html)
 
         const categoryParentNode = xpath.select1(`.//*[@id="${categoryId}"]`, doc)
         const categoryChildNode = xpath.select1(`.//*[@id="${categoryId}"]/following-sibling::div`, doc)
@@ -32,12 +33,13 @@ const getCategory = async () => {
         //Get Category Child Name & Link
         const children = categoryChildLinkNodes.map(categoryLink => {
             const link = xpath.select1('./@href', categoryLink)
-            const categoryChildId = link.value.replace(/[^0-9]/g,'');
+            const categoryChildId = link.value.replace(/[^0-9]/g, '');
             return { categoryChildId, categoryChild: categoryLink.firstChild.data }
         })
-        const categoryChildren = _.orderBy(children, ["category"])
 
+        const categoryChildren = _.orderBy(children, ["category"])
         const category = categoryParentNode.firstChild.data.trim().replace("&nbsp;–&nbsp;Alle Kategorien", "")
+
 
         const newCategory = new Category({ categoryId, category, categoryChildren })
         await newCategory.save(newCategory);

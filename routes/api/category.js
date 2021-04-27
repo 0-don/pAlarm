@@ -22,7 +22,7 @@ router.get("/", async (req, res) => {
 
 router.get("/reload", async (req, res) => {
     try {
-        getCategories()
+        await getCategories()
         res.send("top")
     } catch (err) {
         console.log(err);

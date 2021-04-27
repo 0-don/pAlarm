@@ -11,6 +11,7 @@ const createHtmlTemplate = require("./services/email/createHtmlTemplate")
 const sendMail = require("./services/email/sendMail")
 const browser = require("./services/browser")
 
+const Category = require("./models/Category")
 const PriceAlert = require("./models/PriceAlert");
 const User = require("./models/User")
 
@@ -29,6 +30,12 @@ const refresh = async () => {
     const priceAlerts = await PriceAlert.find().sort("updatedAt").lean()
 
     for (const alert of priceAlerts) {
+        const categoryChild = !alert.categoryChildId ? "" : await Category.findOne({
+            "categoryChildren": { "$elemMatch": { "categoryChildId": alert.categoryChildId } }
+        }, { "categoryChildren.$": 1 })
+
+        alert.categoryChildDbId = categoryChild ? categoryChild.categoryChildren[0]._id : alert.categoryChildDbId
+
         await page.goto(alert.link);
         const html = await page.content()
 
@@ -54,6 +61,7 @@ const refresh = async () => {
             const findA = attributes.find(o => o.id === a.id)
             a.value = findA.value
         })
+        
 
         alert.latestPrice = latestPrice
         alert.categoryChild = getTitle(doc)

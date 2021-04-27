@@ -2,17 +2,7 @@ const express = require("express")
 const router = express.Router();
 const auth = require("../../middleware/auth");
 
-const createDom = require("../../utils/createDom")
-
-const getProducts = require("../../services/html/getProducts")
-const getFilters = require("../../services/html/getFilters")
-const getTitle = require("../../services/html/getTitle")
-
 const createProductLink = require("../../services/createProductLink")
-const createHtmlTemplate = require("../../services/email/createHtmlTemplate")
-const sendMail = require("../../services/email/sendMail")
-const httpRequest = require("../../services/httpRequest")
-const browser = require("../../services/browser")
 
 const Category = require("../../models/Category")
 const PriceAlert = require("../../models/PriceAlert");
