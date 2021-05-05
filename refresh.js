@@ -1,6 +1,7 @@
 const connectDB = require('./config/db');
 const db = connectDB();
 
+
 const createDom = require("./utils/createDom")
 
 const getProducts = require("./services/html/getProducts")
@@ -47,7 +48,7 @@ const refresh = async () => {
         products.forEach(p => p.price = p.price.replace(/,.*/, '').replace(".", "").replace(".", ""))
         const latestPrice = products[0].price
 
-        const targetPlusMargin = alert.targetPrice +  alert.targetPrice / 100 * alert.marginPercent
+        const targetPlusMargin = alert.targetPrice + alert.targetPrice / 100 * alert.marginPercent
 
         if (latestPrice <= targetPlusMargin) {
             const user = await User.findById(alert.user)
@@ -61,7 +62,7 @@ const refresh = async () => {
             const findA = attributes.find(o => o.id === a.id)
             a.value = findA.value
         })
-        
+
 
         alert.latestPrice = latestPrice
         alert.categoryChild = getTitle(doc)
