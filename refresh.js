@@ -1,7 +1,6 @@
 const connectDB = require('./config/db');
 const db = connectDB();
 
-
 const createDom = require("./utils/createDom")
 
 const getProducts = require("./services/html/getProducts")
