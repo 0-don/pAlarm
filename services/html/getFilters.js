@@ -49,7 +49,7 @@ const getFilters = (doc) => {
     
         const available = {
             index: availableTitle.firstChild.data.trim(), filterTitle: availableTitle.firstChild.data.trim(),
-            tagValues: [{ index: "oE0oJ1", id: "oE0oJ1", value: decode(availableValue.firstChild.data.trim()), amount: availableAmount.firstChild.data.trim() }]
+            tagValues: [{ index: "oE2oJ1", id: "oE2oJ1", value: decode(availableValue.firstChild.data.trim()), amount: availableAmount.firstChild.data.trim() }]
         }
 
         return [available, ...filters]
