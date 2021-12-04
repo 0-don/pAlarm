@@ -1,0 +1,6 @@
+node_modules
+cookies.json
+browser.txt
+.env.production
+yarn.lock
+package-lock.json

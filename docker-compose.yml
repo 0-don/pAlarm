@@ -1,0 +1,33 @@
+version: "3.4"
+
+services:
+  web:
+    hostname: palarm-web
+    ports:
+      - 666:666
+    build:
+      context: web/
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      - GENERATE_SOURCEMAP=false
+      - SERVER_HOST=http://palarm-server:5000
+      - NGINX_PORT=666
+    networks:
+      - nginx-network
+  server:
+    hostname: palarm-server
+    ports:
+      - 5000:5000
+    build:
+      context: server/
+      dockerfile: Dockerfile
+    restart: always
+    networks:
+      - nginx-network
+
+
+networks:
+  nginx-network:
+    external:
+      name: nginx-network

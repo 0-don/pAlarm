@@ -1,0 +1,42 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "license": "MIT",
+  "nodemonConfig": {
+    "ignore": [
+      "cookies.json"
+    ]
+  },
+  "scripts": {
+    "start": "node ./src/index",
+    "dev": "yarn && nodemon ./src/index",
+    "refresh": "node refresh"
+  },
+  "dependencies": {
+    "2captcha": "^2.1.6",
+    "agent-base": "^6.0.2",
+    "axios": "^0.24.0",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "express-validator": "^6.10.0",
+    "html-entities": "^2.3.2",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
+    "mjml": "^4.9.0",
+    "mongoose": "^5.12.4",
+    "nodemailer": "^6.5.0",
+    "puppeteer": "^12.0.1",
+    "puppeteer-extra": "^3.2.3",
+    "puppeteer-extra-plugin-stealth": "^2.9.0",
+    "xmldom": "^0.5.0",
+    "xpath": "0.0.32"
+  },
+  "devDependencies": {
+    "concurrently": "^6.0.2",
+    "nodemon": "^2.0.7"
+  }
+}

@@ -1,0 +1,33 @@
+name: Docker Prod
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Create env file
+        run: |
+          touch .env
+          echo PORT=${{ secrets.PORT }} >> .env
+          echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> .env
+          echo SMTP_HOST=${{ secrets.SMTP_HOST }} >> .env
+          echo SMTP_USER=${{ secrets.SMTP_USER }} >> .env
+          echo SMTP_PASS=${{ secrets.SMTP_PASS }} >> .env
+          echo CAPTCHA=${{ secrets.CAPTCHA }} >> .env
+          echo MONGO_DB=${{ secrets.MONGO_DB }} >> .env
+          echo MONGO_HOST=${{ secrets.MONGO_HOST }} >> .env
+          echo MONGO_USER=${{ secrets.MONGO_USER }} >> .env
+          echo MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }} >> .env
+          cat .env
+
+      - name: Copy env to Server
+        run: mv .env ./server
+
+      - name: Docker run
+        run: docker-compose up -d --force-recreate --build
