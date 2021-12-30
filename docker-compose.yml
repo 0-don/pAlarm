@@ -14,7 +14,7 @@ services:
       - SERVER_HOST=http://palarm-server:5000
       - NGINX_PORT=666
     networks:
-      - nginx-network
+      - nginx-pm_default
   server:
     hostname: palarm-server
     ports:
@@ -24,10 +24,10 @@ services:
       dockerfile: Dockerfile
     restart: always
     networks:
-      - nginx-network
+      - nginx-pm_default
 
 
 networks:
-  nginx-network:
-    external:
-      name: nginx-network
+  nginx-pm_default:
+    external: false
+    name: nginx-pm_default
