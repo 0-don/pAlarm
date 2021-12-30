@@ -17,8 +17,8 @@ services:
       - nginx-pm_default
   server:
     hostname: palarm-server
-    ports:
-      - 5000:5000
+    # ports:
+    #   - 5000:5000
     build:
       context: server/
       dockerfile: Dockerfile
