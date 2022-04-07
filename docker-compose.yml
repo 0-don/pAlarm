@@ -1,33 +1,41 @@
-version: "3.4"
+version: "3.8"
 
 services:
   web:
     hostname: palarm-web
     ports:
-      - 666:666
+      - 80
     build:
       context: web/
       dockerfile: Dockerfile
     restart: always
     environment:
       - GENERATE_SOURCEMAP=false
-      - SERVER_HOST=http://palarm-server:5000
-      - NGINX_PORT=666
     networks:
-      - nginx-pm_default
+      - proxy
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.palarm-web.rule=Host(`palarm.myngz.com`)'
+      - 'traefik.http.routers.palarm-web.entrypoints=websecure'
+      - 'traefik.http.routers.palarm-web.tls.certresolver=letsencrypt'
   server:
     hostname: palarm-server
-    # ports:
-    #   - 5000:5000
+    ports:
+      - 5000
     build:
       context: server/
       dockerfile: Dockerfile
     restart: always
     networks:
-      - nginx-pm_default
-
+      - proxy
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.palarm-server.rule=Host(`palarm.myngz.com`) && PathPrefix(`/api`)'
+      - 'traefik.http.routers.palarm-server.entrypoints=websecure'
+      - 'traefik.http.routers.palarm-server.tls.certresolver=letsencrypt'
+      - 'traefik.http.services.palarm-server.loadbalancer.server.port=5000'
 
 networks:
-  nginx-pm_default:
+  proxy:
     external: false
-    name: nginx-pm_default
+    name: proxy
