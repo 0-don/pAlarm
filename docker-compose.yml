@@ -1,8 +1,8 @@
 version: "3.8"
 
 services:
-  web:
-    hostname: palarm-web
+  palarm-web:
+    container_name: palarm-web
     ports:
       - 80
     build:
@@ -18,8 +18,8 @@ services:
       - 'traefik.http.routers.palarm-web.rule=Host(`palarm.myngz.com`)'
       - 'traefik.http.routers.palarm-web.entrypoints=websecure'
       - 'traefik.http.routers.palarm-web.tls.certresolver=letsencrypt'
-  server:
-    hostname: palarm-server
+  palarm-server:
+    container_name: palarm-server
     ports:
       - 5000
     build:
