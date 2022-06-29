@@ -3,8 +3,6 @@ version: "3.8"
 services:
   palarm-web:
     container_name: palarm-web
-    ports:
-      - 80
     build:
       context: web/
       dockerfile: Dockerfile
@@ -20,8 +18,6 @@ services:
       - 'traefik.http.routers.palarm-web.tls.certresolver=letsencrypt'
   palarm-server:
     container_name: palarm-server
-    ports:
-      - 5000
     build:
       context: server/
       dockerfile: Dockerfile
