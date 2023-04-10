@@ -9,7 +9,7 @@
   <p align="center">
     Price Alert for products from multiple vendors
     <br />
-    <a href="https://palarm.myngz.com/">View Site</a>
+    <a href="https://palarm.coding.global">View Site</a>
     ·
     <a href="https://github.com/Don-Cryptus/pAlarm/issues">Report Bug</a>
     ·
