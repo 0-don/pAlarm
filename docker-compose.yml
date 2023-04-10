@@ -13,7 +13,7 @@ services:
       - proxy
     labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.palarm-web.rule=Host(`palarm.myngz.com`)'
+      - 'traefik.http.routers.palarm-web.rule=Host(`palarm.coding.global`)'
       - 'traefik.http.routers.palarm-web.entrypoints=websecure'
       - 'traefik.http.routers.palarm-web.tls.certresolver=letsencrypt'
   palarm-server:
@@ -26,7 +26,7 @@ services:
       - proxy
     labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.palarm-server.rule=Host(`palarm.myngz.com`) && PathPrefix(`/api`)'
+      - 'traefik.http.routers.palarm-server.rule=Host(`palarm.coding.global`) && PathPrefix(`/api`)'
       - 'traefik.http.routers.palarm-server.entrypoints=websecure'
       - 'traefik.http.routers.palarm-server.tls.certresolver=letsencrypt'
       - 'traefik.http.services.palarm-server.loadbalancer.server.port=5000'
