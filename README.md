@@ -1,6 +1,6 @@
 
 <p align="center">
-  <a href="https://github.com/Don-Cryptus/pAlarm">
+  <a href="https://github.com/0-don/pAlarm">
     <img src="web/src/img/clocks.png" alt="Logo" width="200" >
   </a>
 
@@ -11,9 +11,9 @@
     <br />
     <a href="https://palarm.coding.global">View Site</a>
     ·
-    <a href="https://github.com/Don-Cryptus/pAlarm/issues">Report Bug</a>
+    <a href="https://github.com/0-don/pAlarm/issues">Report Bug</a>
     ·
-    <a href="https://github.com/Don-Cryptus/pAlarm/issues">Request Feature</a>
+    <a href="https://github.com/0-don/pAlarm/issues">Request Feature</a>
   </p>
 
   > ## demo account
