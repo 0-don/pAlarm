@@ -1,6 +1,6 @@
 # Install dependencies only when needed
 # Stage 0
-FROM node:16-alpine AS deps
+FROM node:20-alpine AS deps
 WORKDIR /app
 
 COPY package.json ./
@@ -10,13 +10,13 @@ RUN yarn install --frozen-lockfile
 
 # Copy Modules to Production
 # Stage 1
-FROM node:16 AS prod
+FROM node:20 AS prod
 WORKDIR /app
 
 RUN apt-get update \
-  && apt-get install -y wget gnupg \
-  && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-  && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
+  && apt-get install -y wget gnupg ca-certificates \
+  && wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg \
+  && sh -c 'echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list' \
   && apt-get update \
   && apt-get install -y google-chrome-stable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst fonts-freefont-ttf libxss1 \
   --no-install-recommends \
