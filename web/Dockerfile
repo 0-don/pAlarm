@@ -1,6 +1,6 @@
 # Install dependencies only when needed
 # Stage 0
-FROM node:16-alpine AS deps
+FROM node:20-alpine AS deps
 WORKDIR /app
 
 COPY package.json ./
@@ -10,7 +10,7 @@ RUN yarn install --frozen-lockfile
 
 # Rebuild the source code only when needed
 # Stage 1
-FROM node:16-alpine AS builder
+FROM node:20-alpine AS builder
 WORKDIR /app
 
 COPY . .
