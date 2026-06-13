@@ -15,7 +15,8 @@ WORKDIR /app
 
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
-RUN yarn build 
+ENV NODE_OPTIONS=--openssl-legacy-provider
+RUN yarn build
 #############################################
 
 
