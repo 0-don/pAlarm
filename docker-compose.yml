@@ -29,6 +29,8 @@ services:
       context: server/
       dockerfile: Dockerfile
     restart: always
+    env_file:
+      - server/.env
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5000/"]
       interval: 30s
