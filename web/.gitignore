@@ -10,7 +10,6 @@ package-lock.json
 
 # production
 /build
-yarn.lock
 
 # misc
 .DS_Store
