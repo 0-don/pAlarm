@@ -19,6 +19,9 @@ app.use('/api/product-category', require('./routes/productCategory'));
 app.use('/api/price-alert', require('./routes/priceAlert'));
 app.use('/api/search', require('./routes/search'));
 app.use('/api/keys', require('./routes/keys'));
+app.get('/health', (req, res) =>
+  res.sendStatus(require('mongoose').connection.readyState === 1 ? 200 : 503)
+);
 
 // if (process.env.NODE_ENV === 'production') {
 //   // set static folder
