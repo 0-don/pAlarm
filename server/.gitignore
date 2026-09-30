@@ -3,6 +3,5 @@ proxies.txt
 proxy-lists.log
 cookies.json
 browser.txt
-yarn.lock
 package-lock.json
 .env
